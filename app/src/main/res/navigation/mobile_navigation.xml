@@ -18,7 +18,7 @@
         tools:layout="@layout/fragment_giao_dich" />
 
     <fragment
-        android:id="@+id/themoigiaodich"
+        android:id="@+id/themmoigiaodich"
         android:name="org.o7planning.nhom8_quanlychitieu.ui.ThemMoiGiaoDich.ThemMoiGiaoDich"
         android:label="Thêm mới giao dịch"
         tools:layout="@layout/fragment_them_moi_giao_dich" />
