@@ -13,9 +13,9 @@
 
     <fragment
         android:id="@+id/giaodich"
-        android:name="org.o7planning.nhom8_quanlychitieu.ui.GiaoDich.GiaoDich"
+        android:name="org.o7planning.nhom8_quanlychitieu.ui.GiaoDich.GiaoDichFragment_gd"
         android:label="Giao dịch"
-        tools:layout="@layout/fragment_giao_dich" />
+        tools:layout="@layout/fragment_giao_dich_gd" />
 
     <fragment
         android:id="@+id/themoigiaodich"

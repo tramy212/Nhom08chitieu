@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Màu từ Figma -->
+    <color name="gd_letters_and_icons">#052224</color>
+    <color name="gd_ocean_blue_button">#0068FF</color>
+    <color name="gd_light_blue_button">#3299FF</color>
+    <color name="gd_light_blue">#84D1E9</color>
+    <color name="gd_dark_green">#052224</color>
+
+    <!-- Màu cho chức năng giao dịch -->
+    <color name="gd_light_blue_background">#84D1E9</color>
+    <color name="gd_income_green">#4CAF50</color>
+    <color name="gd_expense_red">#F44336</color>
+    <color name="gd_gray">#757575</color>
+</resources>
