@@ -23,15 +23,21 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        // Ẩn ActionBar mặc định
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
+
         BottomNavigationView navView = findViewById(R.id.nav_view);
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
+        // Cập nhật AppBarConfiguration để bao gồm tất cả các ID fragment
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.trangchu, R.id.giaodich, R.id.themmoigiaodich)
+                R.id.trangchu, R.id.giaodich, R.id.themmoigiaodich, R.id.danhmuc, R.id.hoso)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
-        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+
+        // XÓA DÒNG NÀY
+        // NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+
         NavigationUI.setupWithNavController(binding.navView, navController);
     }
-
 }

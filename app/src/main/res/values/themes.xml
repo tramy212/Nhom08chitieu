@@ -15,4 +15,18 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
+
+    <!-- Style cho DatePickerDialog -->
+    <style name="DatePickerDialogTheme" parent="ThemeOverlay.MaterialComponents.Dialog">
+        <item name="colorAccent">#84D1E9</item>
+        <item name="android:datePickerStyle">@style/MyDatePickerStyle</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
+
+    <style name="MyDatePickerStyle" parent="@android:style/Widget.Material.DatePicker">
+        <item name="android:headerBackground">#84D1E9</item>
+        <item name="android:calendarTextColor">#052224</item>
+        <item name="android:dayOfWeekBackground">#84D1E9</item>
+        <item name="android:yearListSelectorColor">#84D1E9</item>
+    </style>
 </resources>
