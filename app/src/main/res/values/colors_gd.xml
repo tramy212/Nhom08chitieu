@@ -8,6 +8,7 @@
     <color name="gd_dark_green">#052224</color>
 
     <!-- Màu cho chức năng giao dịch -->
+    <color name="gd_blue">#0068FF</color>
     <color name="gd_light_blue_background">#84D1E9</color>
     <color name="gd_income_green">#4CAF50</color>
     <color name="gd_expense_red">#F44336</color>

@@ -61,12 +61,8 @@ public class TransactionAdapter_gd extends RecyclerView.Adapter<RecyclerView.Vie
             MonthViewHolder monthHolder = (MonthViewHolder) holder;
             monthHolder.bind(item.getName());
 
-            // Chỉ hiển thị lịch ở tháng Tư
-            if (item.getName().equals("Tháng Tư")) {
-                monthHolder.showCalendar();
-            } else {
-                monthHolder.hideCalendar();
-            }
+            // Hiển thị lịch cho tất cả các tháng
+            monthHolder.showCalendar();
         } else if (holder instanceof TransactionViewHolder) {
             TransactionViewHolder transactionHolder = (TransactionViewHolder) holder;
             transactionHolder.bind(item, position);

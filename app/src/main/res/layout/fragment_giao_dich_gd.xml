@@ -6,10 +6,12 @@
     android:layout_height="match_parent"
     android:background="#84D1E9">
 
-    <View
+    <!-- Thay thế View status_bar_placeholder bằng include layout -->
+    <include
         android:id="@+id/status_bar_placeholder"
+        layout="@layout/status_bar_layout"
         android:layout_width="match_parent"
-        android:layout_height="24dp"
+        android:layout_height="wrap_content"
         android:background="#84D1E9"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -20,19 +22,13 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="#84D1E9"
-        android:elevation="0dp"
+        android:paddingStart="0dp"
+        android:paddingEnd="0dp"
+        android:paddingBottom="0dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/status_bar_placeholder">
-
-        <ImageView
-            android:id="@+id/iv_back"
-            android:layout_width="28dp"
-            android:layout_height="28dp"
-            android:layout_gravity="start"
-            android:contentDescription="Quay lại"
-            android:src="@drawable/ic_back_arrow"
-            android:tint="@color/white" />
+        app:layout_constraintTop_toBottomOf="@+id/status_bar_placeholder">
 
         <TextView
             android:id="@+id/tv_title"
@@ -40,8 +36,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="Giao Dịch"
-            android:textColor="#052224"
-            android:textSize="24sp"
+            android:textColor="@color/black"
+            android:textSize="28dp"
             android:textStyle="bold" />
 
         <ImageView
@@ -50,17 +46,19 @@
             android:layout_height="24dp"
             android:layout_gravity="end"
             android:layout_marginEnd="16dp"
-            android:contentDescription="Thông báo"
-            android:src="@drawable/thong_bao" />
-
+            android:src="@drawable/thong_bao"
+            android:contentDescription="Notifications" />
     </androidx.appcompat.widget.Toolbar>
+
+
+    <!-- Phần còn lại của layout giữ nguyên -->
 
     <androidx.cardview.widget.CardView
         android:id="@+id/card_total_balance"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="4dp"
         android:layout_marginEnd="16dp"
         app:cardCornerRadius="16dp"
         app:cardElevation="4dp"
@@ -100,7 +98,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
@@ -113,6 +111,9 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_weight="1"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?android:attr/selectableItemBackground"
             app:cardCornerRadius="16dp"
             app:cardElevation="4dp">
 
@@ -121,18 +122,20 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:padding="12dp">
 
                 <ImageView
+                    android:id="@+id/iv_income"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:contentDescription="Icon thu nhập"
                     android:src="@drawable/thu_nhap" />
 
                 <TextView
+                    android:id="@+id/tv_income_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="4dp"
                     android:text="Thu Nhập"
                     android:textColor="#052224"
                     android:textSize="16sp"
@@ -155,6 +158,9 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_weight="1"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?android:attr/selectableItemBackground"
             app:cardCornerRadius="16dp"
             app:cardElevation="4dp">
 
@@ -163,18 +169,20 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:padding="12dp">
 
                 <ImageView
+                    android:id="@+id/iv_expense"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:contentDescription="Icon chi tiêu"
                     android:src="@drawable/chi_tieu" />
 
                 <TextView
+                    android:id="@+id/tv_expense_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="4dp"
                     android:text="Chi Tiêu"
                     android:textColor="#052224"
                     android:textSize="16sp"
@@ -197,7 +205,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="56dp"
         app:cardCornerRadius="20dp"
