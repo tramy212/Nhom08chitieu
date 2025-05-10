@@ -1,0 +1,118 @@
+{
+    "Transactions": [
+        {
+            "id": 1,
+            "date": "2025-05-10",
+            "categoryId": 1,
+            "amount": 150000,
+            "title": "Bữa trưa",
+            "note": "Ăn trưa tại quán A"
+        },
+        {
+            "id": 2,
+            "date": "2025-05-11",
+            "categoryId": 2,
+            "amount": 50000,
+            "title": "Đổ xăng",
+            "note": "Xăng xe"
+        },
+        {
+            "id": 3,
+            "date": "2025-05-12",
+            "categoryId": 3,
+            "amount": 200000,
+            "title": "Mua áo",
+            "note": "Mua áo thun"
+        },
+        {
+            "id": 4,
+            "date": "2025-05-13",
+            "categoryId": 4,
+            "amount": 300000,
+            "title": "Hóa đơn điện",
+            "note": "Tiền điện"
+        },
+        {
+            "id": 5,
+            "date": "2025-05-14",
+            "categoryId": 5,
+            "amount": 100000,
+            "title": "Xem phim",
+            "note": "Vé xem phim"
+        }
+    ],
+    "Budgets": [
+        {
+            "tenMucTieu": "Tiết kiệm hàng tháng",
+            "soTien": 2000000,
+            "ghiChu": "Đặt mục tiêu tiết kiệm cố định"
+        },
+        {
+            "tenMucTieu": "Đi du lịch",
+            "soTien": 5000000,
+            "ghiChu": "Tiết kiệm cho kỳ nghỉ hè"
+        },
+        {
+            "tenMucTieu": "Mua sắm quần áo",
+            "soTien": 1000000,
+            "ghiChu": "Sắm đồ mùa đông"
+        },
+        {
+            "tenMucTieu": "Chi phí học tập",
+            "soTien": 3000000,
+            "ghiChu": "Đóng học phí kỳ mới"
+        }
+    ],
+    "Users": [
+        {
+            "userId": 1,
+            "email": "johnsmith@example.com",
+            "password": "123456",
+            "name": "John Smith"
+        },
+        {
+            "userId": 2,
+            "email": "annanguyen@example.com",
+            "password": "password123",
+            "name": "Anna Nguyen"
+        },
+        {
+            "userId": 3,
+            "email": "mikelee@example.com",
+            "password": "mike2025",
+            "name": "Mike Lee"
+        }
+    ],
+    "DanhMuc": [
+        {
+            "id": 1,
+            "ten": "Ăn uống",
+            "moTa": "Chi phí cho ăn uống, nhà hàng, cà phê"
+        },
+        {
+            "id": 2,
+            "ten": "Di chuyển",
+            "moTa": "Chi phí xăng, xe bus, taxi"
+        },
+        {
+            "id": 3,
+            "ten": "Mua sắm",
+            "moTa": "Chi phí mua quần áo, giày dép, đồ dùng cá nhân"
+        },
+        {
+            "id": 4,
+            "ten": "Hóa đơn",
+            "moTa": "Chi phí điện, nước, internet, điện thoại"
+        },
+        {
+            "id": 5,
+            "ten": "Giải trí",
+            "moTa": "Chi phí phim, ca nhạc, du lịch, vui chơi"
+        },
+        {
+            "id": 6,
+            "ten": "Giáo dục",
+            "moTa": "Chi phí học phí, sách vở, khóa học"
+        }
+    ]
+}

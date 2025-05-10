@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "8725235459",
+    "firebase_url": "https://nhom8chitieu-default-rtdb.firebaseio.com",
+    "project_id": "nhom8chitieu",
+    "storage_bucket": "nhom8chitieu.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:8725235459:android:5d88d3ce36118625888b36",
+        "android_client_info": {
+          "package_name": "org.o7planning.nhom8_quanlychitieu"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAzuqArO5MV-WuwyJQNioiweM3VyrF3SLY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
