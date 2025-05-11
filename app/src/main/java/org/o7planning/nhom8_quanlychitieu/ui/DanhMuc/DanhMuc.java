@@ -91,6 +91,7 @@ public class DanhMuc extends Fragment implements DanhMucAdapter.OnItemClickListe
                     if (danhMuc != null) {
                         // Lưu key của Firebase vào danhMuc để dễ dàng xóa sau này
                         danhMuc.setFirebaseKey(dataSnapshot.getKey());
+                        Log.d(TAG, "Danh mục từ Firebase: " + danhMuc.getTen());
                         danhMucList.add(danhMuc);
                     }
                 }

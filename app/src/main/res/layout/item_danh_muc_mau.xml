@@ -42,5 +42,6 @@
         android:layout_marginTop="8dp"
         android:text="Danh Mục"
         android:textSize="14sp"
-        android:textColor="#333333" />
+        android:textColor="#333333"
+        android:fontFamily="sans-serif"/>
 </LinearLayout>

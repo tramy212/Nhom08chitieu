@@ -158,8 +158,11 @@ public class DanhMucAdapter extends RecyclerView.Adapter<DanhMucAdapter.DanhMucV
             case "xăng":
                 iconView.setImageResource(R.drawable.ic_fuel);
                 break;
-            default:
-                // Sử dụng icon mặc định
+            case "lương":
+                iconView.setImageResource(R.drawable.ic_salary_gd); // Use the new icon
+                break;
+
+            default: // Danh mục tùy chỉnh sẽ rơi vào đây
                 iconView.setImageResource(R.drawable.ic_dashboard_black_24dp);
                 break;
         }
