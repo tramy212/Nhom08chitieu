@@ -1,8 +1,10 @@
 package org.o7planning.nhom8_quanlychitieu;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.database.FirebaseDatabase;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
@@ -11,10 +13,12 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import org.o7planning.nhom8_quanlychitieu.databinding.ActivityMainBinding;
+import org.o7planning.nhom8_quanlychitieu.utils.FirebaseHelper;
 
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
+    private static final String TAG = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,5 +43,14 @@ public class MainActivity extends AppCompatActivity {
         // NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
 
         NavigationUI.setupWithNavController(binding.navView, navController);
+
+        // Kiểm tra kết nối Firebase
+        try {
+            Log.d(TAG, "Bắt đầu kiểm tra kết nối Firebase...");
+            FirebaseHelper.testConnection();
+        } catch (Exception e) {
+            Log.e(TAG, "Lỗi khi kiểm tra kết nối Firebase: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 }

@@ -1,5 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
+    // Thêm plugin Google services với cú pháp Kotlin DSL
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -35,6 +37,11 @@ android {
 }
 
 dependencies {
+    // Firebase dependencies
+    implementation(platform("com.google.firebase:firebase-bom:32.7.0"))
+    implementation("com.google.firebase:firebase-database")
+    implementation("com.google.firebase:firebase-auth")
+    implementation("com.google.firebase:firebase-analytics")
 
     implementation(libs.appcompat)
     implementation(libs.material)

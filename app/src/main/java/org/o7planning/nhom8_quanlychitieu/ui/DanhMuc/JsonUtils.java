@@ -1,3 +1,4 @@
+
 package org.o7planning.nhom8_quanlychitieu.ui.DanhMuc;
 
 import android.content.Context;
@@ -6,7 +7,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.o7planning.nhom8_quanlychitieu.R;
-import org.o7planning.nhom8_quanlychitieu.ui.DanhMuc.DanhMucModel;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -45,9 +45,30 @@ public class JsonUtils {
                 String ten = danhMucObj.getString("ten");
                 String moTa = danhMucObj.getString("moTa");
 
-                DanhMucModel danhMuc = new DanhMucModel(id, ten, moTa);
+                // Try to get icon and color if they exist, otherwise use defaults
+                String icon = danhMucObj.has("icon") ? danhMucObj.getString("icon") : null;
+                String mauSac = danhMucObj.has("mauSac") ? danhMucObj.getString("mauSac") : null;
+
+                DanhMucModel danhMuc;
+                if (icon != null && mauSac != null) {
+                    danhMuc = new DanhMucModel(id, ten, moTa, icon, mauSac);
+                } else {
+                    danhMuc = new DanhMucModel(id, ten, moTa);
+                }
+
                 danhMucList.add(danhMuc);
             }
+
+            // Add "Thêm" button as the last item
+            DanhMucModel addButton = new DanhMucModel(
+                    -1, // Special ID for add button
+                    "Thêm",
+                    "Thêm danh mục mới",
+                    "add",
+                    "#87CEFA" // Light blue
+            );
+            danhMucList.add(addButton);
+
         } catch (JSONException e) {
             e.printStackTrace();
         }

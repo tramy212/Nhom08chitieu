@@ -22,7 +22,8 @@
             <FrameLayout
                 android:id="@+id/iconContainer"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:background="#87CEFA">
 
                 <ImageView
                     android:id="@+id/iconView"
@@ -30,17 +31,6 @@
                     android:layout_height="48dp"
                     android:layout_gravity="center"
                     android:tint="#FFFFFF" />
-
-                <TextView
-                    android:id="@+id/deleteButton"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_gravity="top|end"
-                    android:gravity="center"
-                    android:text="×"
-                    android:textColor="#FFFFFF"
-                    android:textSize="22sp"
-                    android:textStyle="bold" />
             </FrameLayout>
         </androidx.cardview.widget.CardView>
     </FrameLayout>
