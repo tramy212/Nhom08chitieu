@@ -4,25 +4,25 @@
     <item
         android:id="@+id/trangchu"
         android:icon="@drawable/ic_home_black_24dp"
-        android:title="" />
+        android:title="Trang chủ" />
 
     <item
         android:id="@+id/giaodich"
-        android:icon="@drawable/ic_home_black_24dp"
-        android:title="" />
+        android:icon="@drawable/ic_sync_24dp"
+        android:title="Giao dịch" />
 
     <item
         android:id="@+id/themmoigiaodich"
-        android:icon="@drawable/ic_home_black_24dp"
-        android:title="" />
+        android:icon="@drawable/ic_add"
+        android:title="Thêm mới" />
 
     <item
         android:id="@+id/danhmuc"
-        android:icon="@drawable/ic_home_black_24dp"
-        android:title="" />
+        android:icon="@drawable/ic_list_24dp"
+        android:title="Danh mục" />
 
     <item
         android:id="@+id/hoso"
-        android:icon="@drawable/ic_home_black_24dp"
-        android:title="" />
+        android:icon="@drawable/ic_person_24dp"
+        android:title="Hồ sơ" />
 </menu>

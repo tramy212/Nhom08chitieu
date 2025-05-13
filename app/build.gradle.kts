@@ -42,7 +42,9 @@ dependencies {
     implementation("com.google.firebase:firebase-database")
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.firebase:firebase-analytics")
-
+    implementation ("de.hdodenhof:circleimageview:3.1.0")
+    implementation ("com.google.firebase:firebase-auth:22.3.1")
+    implementation ("com.google.firebase:firebase-database:20.3.0")
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.constraintlayout)
@@ -53,4 +55,5 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+
 }

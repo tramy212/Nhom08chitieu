@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F5F5F5">
+
+    <!-- Header -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingVertical="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/backBtn"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="8dp"
+            android:padding="12dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@android:color/white" />
+
+        <TextView
+            android:id="@+id/textView14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-medium"
+            android:text="Cài Đặt Thông Báo"
+            android:textColor="@android:color/white"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/notificationBtn"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@android:color/white" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- Notification Settings Card -->
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="2dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/header">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- General Notifications -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingVertical="12dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Thông Báo Chung"
+                    android:textColor="@android:color/black"
+                    android:textSize="16sp" />
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/generalNotificationSwitch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    app:thumbTint="#4285F4"
+                    app:trackTint="#B3E5FC" />
+            </LinearLayout>
+
+            <!-- Sound Notifications -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingVertical="12dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Âm Thanh"
+                    android:textColor="@android:color/black"
+                    android:textSize="16sp" />
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/soundNotificationSwitch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    app:thumbTint="#4285F4"
+                    app:trackTint="#B3E5FC" />
+            </LinearLayout>
+
+            <!-- Vibration Notifications -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingVertical="12dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Âm Thanh Cạnh Gợi"
+                    android:textColor="@android:color/black"
+                    android:textSize="16sp" />
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/vibrationNotificationSwitch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    app:thumbTint="#4285F4"
+                    app:trackTint="#B3E5FC" />
+            </LinearLayout>
+
+            <!-- Rung -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingVertical="12dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Rung"
+                    android:textColor="@android:color/black"
+                    android:textSize="16sp" />
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/rungSwitch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    app:thumbTint="#4285F4"
+                    app:trackTint="#B3E5FC" />
+            </LinearLayout>
+
+            <!-- Cập Nhật Giao Dịch -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingVertical="12dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Cập Nhật Giao Dịch"
+                    android:textColor="@android:color/black"
+                    android:textSize="16sp" />
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/transactionUpdateSwitch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="false"
+                    app:thumbTint="#4285F4"
+                    app:trackTint="#B3E5FC" />
+            </LinearLayout>
+
+            <!-- Nhắc Nhở Chi Tiêu -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingVertical="12dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Nhắc Nhở Chi Tiêu"
+                    android:textColor="@android:color/black"
+                    android:textSize="16sp" />
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/expenseReminderSwitch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="false"
+                    app:thumbTint="#4285F4"
+                    app:trackTint="#B3E5FC" />
+            </LinearLayout>
+
+            <!-- Thông Báo Ngân Sách -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingVertical="12dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Thông Báo Ngân Sách"
+                    android:textColor="@android:color/black"
+                    android:textSize="16sp" />
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/budgetNotificationSwitch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="false"
+                    app:thumbTint="#4285F4"
+                    app:trackTint="#B3E5FC" />
+            </LinearLayout>
+
+            <!-- Cảnh Báo Số Dư Thấp -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingVertical="12dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Cảnh Báo Số Dư Thấp"
+                    android:textColor="@android:color/black"
+                    android:textSize="16sp" />
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/lowBalanceSwitch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="false"
+                    app:thumbTint="#4285F4"
+                    app:trackTint="#B3E5FC" />
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</androidx.constraintlayout.widget.ConstraintLayout>

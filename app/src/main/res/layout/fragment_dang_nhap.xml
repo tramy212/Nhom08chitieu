@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/login_background">
+
+    <TextView
+        android:id="@+id/tvWelcome"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:text="@string/chao_mung"
+        android:textColor="@android:color/black"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="48dp"
+        android:background="@drawable/white_rounded_background"
+        android:paddingTop="32dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvWelcome">
+
+        <TextView
+            android:id="@+id/tvEmailLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:text="@string/tai_dang_nhap_bang"
+            android:textColor="@android:color/black"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/etEmail"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="32dp"
+            android:background="@drawable/rounded_edittext"
+            android:hint="@string/email_hint"
+            android:inputType="textEmailAddress"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:textColor="@android:color/black"
+            android:textColorHint="#BBDEFB"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvEmailLabel" />
+
+        <TextView
+            android:id="@+id/tvPasswordLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/mat_khau"
+            android:textColor="@android:color/black"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/etEmail" />
+
+        <RelativeLayout
+            android:id="@+id/passwordLayout"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="32dp"
+            android:background="@drawable/rounded_edittext"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvPasswordLabel">
+
+            <EditText
+                android:id="@+id/etPassword"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:hint="@string/password_hint"
+                android:inputType="textPassword"
+                android:paddingStart="16dp"
+                android:paddingEnd="48dp"
+                android:textColor="@android:color/black"
+                android:textColorHint="#BBDEFB" />
+
+            <ImageView
+                android:id="@+id/ivTogglePassword"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:contentDescription="Toggle password visibility"
+                android:padding="12dp"
+                android:src="@drawable/ic_visibility" />
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/btnLogin"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="32dp"
+            android:background="@drawable/rounded_button"
+            android:text="@string/dang_nhap"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/passwordLayout" />
+
+        <TextView
+            android:id="@+id/tvForgotPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/quen_mat_khau"
+            android:textColor="#4FC3F7"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnLogin" />
+
+        <Button
+            android:id="@+id/btnRegister"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="32dp"
+            android:background="@drawable/rounded_button"
+            android:text="@string/dang_ky"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvForgotPassword" />
+
+        <TextView
+            android:id="@+id/tvOrLoginWith"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="@string/hoac_dang_nhap_bang"
+            android:textColor="#757575"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnRegister" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvOrLoginWith">
+
+            <ImageView
+                android:id="@+id/ivFacebook"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginEnd="24dp"
+                android:contentDescription="Facebook login"
+                android:src="@drawable/ic_facebook" />
+
+            <ImageView
+                android:id="@+id/ivGoogle"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:contentDescription="Google login"
+                android:src="@drawable/ic_google" />
+        </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
