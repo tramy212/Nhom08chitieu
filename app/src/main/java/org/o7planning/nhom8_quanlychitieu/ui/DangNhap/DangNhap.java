@@ -71,8 +71,13 @@ public class DangNhap extends Fragment {
         // Check if user is signed in (non-null) and update UI accordingly
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
-            // Bỏ qua kiểm tra email xác thực
-            navigateToHome();
+            if (currentUser.isEmailVerified()) {
+                navigateToHome();
+            } else {
+                // Người dùng đã đăng nhập nhưng chưa xác thực email
+                Toast.makeText(getContext(), "Vui lòng xác thực email trước khi đăng nhập.", Toast.LENGTH_SHORT).show();
+                mAuth.signOut();
+            }
         }
     }
 
@@ -105,9 +110,19 @@ public class DangNhap extends Fragment {
                         Log.d(TAG, "signInWithEmail:success");
                         FirebaseUser user = mAuth.getCurrentUser();
                         if (user != null) {
-                            // Bỏ qua kiểm tra email xác thực
-                            Toast.makeText(getContext(), R.string.login_success, Toast.LENGTH_SHORT).show();
-                            navigateToHome();
+                            if (user.isEmailVerified()) {
+                                Toast.makeText(getContext(), R.string.login_success, Toast.LENGTH_SHORT).show();
+                                navigateToHome();
+                            } else {
+                                Toast.makeText(getContext(), "Vui lòng xác thực email trước khi đăng nhập. Kiểm tra hộp thư của bạn.", Toast.LENGTH_LONG).show();
+                                // Gửi lại email xác thực nếu cần
+                                user.sendEmailVerification().addOnCompleteListener(emailTask -> {
+                                    if (emailTask.isSuccessful()) {
+                                        Toast.makeText(getContext(), "Email xác thực đã được gửi lại. Vui lòng kiểm tra hộp thư của bạn.", Toast.LENGTH_LONG).show();
+                                    }
+                                });
+                                mAuth.signOut();
+                            }
                         }
                     }
                 })
@@ -127,6 +142,17 @@ public class DangNhap extends Fragment {
                         } else {
                             Toast.makeText(getContext(), "Đăng nhập thất bại: " + e.getMessage(), Toast.LENGTH_LONG).show();
                         }
+                    }
+                });
+    }
+
+    private void sendVerificationEmailAgain(FirebaseUser user) {
+        user.sendEmailVerification()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Toast.makeText(getContext(), "Email xác thực đã được gửi lại. Vui lòng kiểm tra hộp thư của bạn.", Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(getContext(), "Không thể gửi lại email xác thực: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
                     }
                 });
     }

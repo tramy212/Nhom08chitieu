@@ -135,11 +135,11 @@ public class DangKyFragment extends Fragment {
         // Log để debug
         Log.d(TAG, "Bắt đầu đăng ký với email: " + email);
 
-        // Bỏ qua việc gửi email xác thực
-        registerWithoutEmailVerification(name, email, password);
+        // Đăng ký người dùng với email và mật khẩu
+        registerWithEmailVerification(name, email, password);
     }
 
-    private void registerWithoutEmailVerification(String name, String email, String password) {
+    private void registerWithEmailVerification(String name, String email, String password) {
         // Create user with email and password
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
@@ -151,20 +151,39 @@ public class DangKyFragment extends Fragment {
                             FirebaseUser user = mAuth.getCurrentUser();
 
                             if (user != null) {
-                                // Lưu thông tin người dùng vào database
-                                User userModel = new User(user.getUid(), name, email);
-                                mDatabase.child("Users").child(user.getUid()).setValue(userModel)
+                                // Gửi email xác thực
+                                user.sendEmailVerification()
                                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                                             @Override
-                                            public void onComplete(@NonNull Task<Void> task) {
-                                                progressBar.setVisibility(View.GONE);
-                                                if (task.isSuccessful()) {
-                                                    Toast.makeText(getContext(), "Đăng ký thành công!", Toast.LENGTH_LONG).show();
-                                                    // Chuyển về màn hình đăng nhập
-                                                    navigateToLogin();
+                                            public void onComplete(@NonNull Task<Void> emailTask) {
+                                                if (emailTask.isSuccessful()) {
+                                                    Log.d(TAG, "Email verification sent.");
+                                                    // Lưu thông tin người dùng vào database
+                                                    User userModel = new User(user.getUid(), name, email);
+                                                    mDatabase.child("Users").child(user.getUid()).setValue(userModel)
+                                                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                                @Override
+                                                                public void onComplete(@NonNull Task<Void> task) {
+                                                                    progressBar.setVisibility(View.GONE);
+                                                                    if (task.isSuccessful()) {
+                                                                        Toast.makeText(getContext(), "Đăng ký thành công! Vui lòng kiểm tra email để xác thực tài khoản.", Toast.LENGTH_LONG).show();
+                                                                        // Đăng xuất người dùng sau khi gửi email xác thực
+                                                                        mAuth.signOut();
+                                                                        // Chuyển về màn hình đăng nhập
+                                                                        navigateToLogin();
+                                                                    } else {
+                                                                        Log.e(TAG, "Failed to save user data", task.getException());
+                                                                        Toast.makeText(getContext(), "Đăng ký thành công nhưng không thể lưu thông tin người dùng", Toast.LENGTH_SHORT).show();
+                                                                        mAuth.signOut();
+                                                                        navigateToLogin();
+                                                                    }
+                                                                }
+                                                            });
                                                 } else {
-                                                    Log.e(TAG, "Failed to save user data", task.getException());
-                                                    Toast.makeText(getContext(), "Đăng ký thành công nhưng không thể lưu thông tin người dùng", Toast.LENGTH_SHORT).show();
+                                                    progressBar.setVisibility(View.GONE);
+                                                    Log.e(TAG, "sendEmailVerification", emailTask.getException());
+                                                    Toast.makeText(getContext(), "Đăng ký thành công nhưng không thể gửi email xác thực. Vui lòng liên hệ hỗ trợ.", Toast.LENGTH_LONG).show();
+                                                    mAuth.signOut();
                                                     navigateToLogin();
                                                 }
                                             }
@@ -201,6 +220,29 @@ public class DangKyFragment extends Fragment {
                             Toast.makeText(getContext(), "Email không hợp lệ.", Toast.LENGTH_LONG).show();
                         } else {
                             Toast.makeText(getContext(), "Đăng ký thất bại: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+    }
+
+    private void sendVerificationEmail(FirebaseUser user) {
+        user.sendEmailVerification()
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        progressBar.setVisibility(View.GONE);
+                        if (task.isSuccessful()) {
+                            Log.d(TAG, "Email verification sent.");
+                            Toast.makeText(getContext(), "Đăng ký thành công! Vui lòng kiểm tra email để xác thực tài khoản.", Toast.LENGTH_LONG).show();
+                            // Đăng xuất người dùng sau khi gửi email xác thực
+                            mAuth.signOut();
+                            // Chuyển về màn hình đăng nhập
+                            navigateToLogin();
+                        } else {
+                            Log.e(TAG, "sendEmailVerification", task.getException());
+                            Toast.makeText(getContext(), "Đăng ký thành công nhưng không thể gửi email xác thực. Vui lòng liên hệ hỗ trợ.", Toast.LENGTH_LONG).show();
+                            mAuth.signOut();
+                            navigateToLogin();
                         }
                     }
                 });
