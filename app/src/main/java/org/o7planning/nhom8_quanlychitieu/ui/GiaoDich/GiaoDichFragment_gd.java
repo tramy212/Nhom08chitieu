@@ -608,19 +608,47 @@ public class GiaoDichFragment_gd extends Fragment implements TransactionAdapter_
 
     @Override
     public void onEditClick(TransactionItem_gd transaction, int position) {
-        // Tạo Intent để mở màn hình chỉnh sửa giao dịch
-        Intent intent = new Intent(getActivity(), ThemMoiGiaoDich.class);
+        try {
+            // Tạo một instance mới của Fragment ThemMoiGiaoDich
+            ThemMoiGiaoDich themMoiGiaoDichFragment = new ThemMoiGiaoDich();
 
-        // Truyền thông tin giao dịch cần chỉnh sửa
-        intent.putExtra("TRANSACTION_ID", transaction.getId());
-        intent.putExtra("TRANSACTION_TITLE", transaction.getName());
-        intent.putExtra("TRANSACTION_AMOUNT", transaction.getAmount().replace("₫", "").trim());
-        intent.putExtra("TRANSACTION_DATE", transaction.getDate());
-        intent.putExtra("TRANSACTION_CATEGORY", transaction.getCategory());
-        intent.putExtra("IS_EDITING", true);
+            // Tạo Bundle để truyền dữ liệu
+            Bundle args = new Bundle();
+            args.putBoolean("IS_EDITING", true);
+            args.putString("TRANSACTION_ID", transaction.getId());
+            args.putString("TRANSACTION_TITLE", transaction.getName());
 
-        // Mở màn hình chỉnh sửa
-        startActivity(intent);
+            // Xử lý số tiền - loại bỏ ký tự đặc biệt
+            String amount = transaction.getAmount().replace(".", "")
+                    .replace(",", "").replace("₫", "").replace(" ", "").trim();
+            args.putString("TRANSACTION_AMOUNT", amount);
+
+            // Xử lý ngày tháng - chuyển từ dd/MM sang dd/MM/yyyy
+            String date = transaction.getDate();
+            if (date.matches("\\d{1,2}/\\d{1,2}")) {
+                // Nếu chỉ có ngày và tháng, thêm năm hiện tại
+                Calendar cal = Calendar.getInstance();
+                date = date + "/" + cal.get(Calendar.YEAR);
+            }
+            args.putString("TRANSACTION_DATE", date);
+
+            args.putString("TRANSACTION_CATEGORY", transaction.getCategory());
+
+            // Đặt arguments cho Fragment
+            themMoiGiaoDichFragment.setArguments(args);
+
+            // Thay thế Fragment hiện tại bằng Fragment ThemMoiGiaoDich
+            if (getActivity() != null) {
+                getActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.nav_host_fragment, themMoiGiaoDichFragment)
+                        .addToBackStack(null)  // Để có thể quay lại Fragment trước đó
+                        .commit();
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Lỗi khi mở màn hình chỉnh sửa: " + e.getMessage());
+            Toast.makeText(getContext(), "Lỗi khi mở màn hình chỉnh sửa: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
