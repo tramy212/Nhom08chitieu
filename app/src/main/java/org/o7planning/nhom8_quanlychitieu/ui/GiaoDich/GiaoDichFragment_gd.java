@@ -2,11 +2,13 @@ package org.o7planning.nhom8_quanlychitieu.ui.GiaoDich;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,18 +27,37 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import org.o7planning.nhom8_quanlychitieu.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import org.o7planning.nhom8_quanlychitieu.R;
+import org.o7planning.nhom8_quanlychitieu.models.Transaction;
+import org.o7planning.nhom8_quanlychitieu.ui.DanhMuc.DanhMucModel;
+import org.o7planning.nhom8_quanlychitieu.ui.ThemMoiGiaoDich.ThemMoiGiaoDich;
+
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class GiaoDichFragment_gd extends Fragment implements TransactionAdapter_gd.OnTransactionActionListener {
+    private static final String TAG = "GiaoDichFragment_gd";
+
     private TextView tvTotalBalance;
     private TextView tvIncome;
     private TextView tvExpense;
@@ -52,9 +73,14 @@ public class GiaoDichFragment_gd extends Fragment implements TransactionAdapter_
     private ImageView ivIncome;
     private ImageView ivExpense;
     private TextView tvTitle;
-    private TextView tvTime; // Thêm biến cho TextView hiển thị thời gian
-    private Timer timer; // Thêm biến Timer để cập nhật thời gian
-    private Handler handler = new Handler(Looper.getMainLooper()); // Handler để cập nhật UI
+    private TextView tvTime;
+    private Timer timer;
+    private Handler handler = new Handler(Looper.getMainLooper());
+
+    // Firebase
+    private FirebaseAuth mAuth;
+    private DatabaseReference mDatabase;
+    private DatabaseReference danhMucRef;
 
     // Biến để lưu trạng thái lọc
     private static final int FILTER_NONE = 0;
@@ -64,6 +90,13 @@ public class GiaoDichFragment_gd extends Fragment implements TransactionAdapter_
 
     // Lưu danh sách giao dịch gốc
     private List<TransactionItem_gd> allTransactions = new ArrayList<>();
+
+    // Lưu danh sách danh mục
+    private Map<Integer, DanhMucModel> danhMucMap = new HashMap<>();
+
+    // Tổng thu nhập và chi tiêu
+    private double totalIncome = 0;
+    private double totalExpense = 0;
 
     // Mảng tên tháng tiếng Việt
     private final String[] monthNames = {
@@ -76,6 +109,11 @@ public class GiaoDichFragment_gd extends Fragment implements TransactionAdapter_
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_giao_dich_gd, container, false);
+
+        // Initialize Firebase
+        mAuth = FirebaseAuth.getInstance();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        danhMucRef = FirebaseDatabase.getInstance().getReference("DanhMuc");
 
         // Initialize views
         tvTotalBalance = root.findViewById(R.id.tv_total_balance);
@@ -130,8 +168,8 @@ public class GiaoDichFragment_gd extends Fragment implements TransactionAdapter_
         // Setup click listeners for filter cards
         setupFilterCards();
 
-        // Load sample data
-        loadSampleData();
+        // Tải danh mục trước
+        loadDanhMuc();
 
         // Cập nhật tiêu đề dựa trên trạng thái lọc
         updateTitle();
@@ -140,6 +178,249 @@ public class GiaoDichFragment_gd extends Fragment implements TransactionAdapter_
         startClock();
 
         return root;
+    }
+
+    private void loadDanhMuc() {
+        danhMucRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                danhMucMap.clear();
+
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    DanhMucModel danhMuc = dataSnapshot.getValue(DanhMucModel.class);
+                    if (danhMuc != null) {
+                        danhMuc.setFirebaseKey(dataSnapshot.getKey());
+
+                        // Nếu loại chưa được đặt, đặt mặc định dựa trên tên danh mục
+                        if (danhMuc.getLoai() == null) {
+                            setDefaultCategoryType(danhMuc);
+                        }
+
+                        danhMucMap.put(danhMuc.getId(), danhMuc);
+                    }
+                }
+
+                Log.d(TAG, "Đã tải " + danhMucMap.size() + " danh mục");
+
+                // Sau khi tải danh mục xong, tải giao dịch
+                loadTransactionsFromFirebase();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e(TAG, "Lỗi khi tải danh mục: " + error.getMessage());
+                Toast.makeText(getContext(), "Lỗi khi tải danh mục: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void setDefaultCategoryType(DanhMucModel danhMuc) {
+        String tenLowerCase = danhMuc.getTen().toLowerCase();
+
+        // Danh sách các từ khóa cho danh mục thu nhập
+        String[] incomeKeywords = {"lương", "thu nhập", "tiền thưởng", "tiền lãi", "cổ tức", "tiền lương", "thưởng", "lãi", "thu"};
+
+        // Kiểm tra xem tên danh mục có chứa từ khóa thu nhập không
+        for (String keyword : incomeKeywords) {
+            if (tenLowerCase.contains(keyword)) {
+                danhMuc.setLoai("income");
+
+                // Cập nhật loại danh mục trong Firebase
+                danhMucRef.child(danhMuc.getFirebaseKey()).child("loai").setValue("income");
+                return;
+            }
+        }
+
+        // Nếu không phải thu nhập, đặt mặc định là chi tiêu
+        danhMuc.setLoai("expense");
+        danhMucRef.child(danhMuc.getFirebaseKey()).child("loai").setValue("expense");
+    }
+
+    private void loadTransactionsFromFirebase() {
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser == null) {
+            Toast.makeText(getContext(), "Vui lòng đăng nhập để xem giao dịch", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        String userId = currentUser.getUid();
+        DatabaseReference transactionsRef = mDatabase.child("Transactions");
+
+        transactionsRef.orderByChild("userId").equalTo(userId).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                allTransactions.clear();
+                totalIncome = 0;
+                totalExpense = 0;
+
+                // Tạo map để nhóm giao dịch theo tháng
+                Map<String, List<TransactionItem_gd>> transactionsByMonth = new HashMap<>();
+
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    Transaction transaction = dataSnapshot.getValue(Transaction.class);
+                    if (transaction != null) {
+                        // Lấy thông tin danh mục
+                        DanhMucModel danhMuc = danhMucMap.get(transaction.getDanhMucId());
+                        String category = danhMuc != null ? danhMuc.getTen() : "Khác";
+
+                        // Xác định loại giao dịch (thu nhập hoặc chi tiêu) dựa vào số tiền và danh mục
+                        String type;
+                        if (danhMuc != null && danhMuc.isIncome()) {
+                            type = "income";
+                            // Đảm bảo số tiền là dương cho thu nhập
+                            if (transaction.getAmount() < 0) {
+                                // Cập nhật số tiền trong Firebase
+                                mDatabase.child("Transactions").child(transaction.getId()).child("amount")
+                                        .setValue(Math.abs(transaction.getAmount()));
+                                transaction.setAmount(Math.abs(transaction.getAmount()));
+                            }
+                        } else {
+                            type = "expense";
+                            // Đảm bảo số tiền là âm cho chi tiêu
+                            if (transaction.getAmount() > 0) {
+                                // Cập nhật số tiền trong Firebase
+                                mDatabase.child("Transactions").child(transaction.getId()).child("amount")
+                                        .setValue(-Math.abs(transaction.getAmount()));
+                                transaction.setAmount(-Math.abs(transaction.getAmount()));
+                            }
+                        }
+
+                        // Cập nhật tổng thu nhập và chi tiêu
+                        if (transaction.getAmount() >= 0) {
+                            totalIncome += transaction.getAmount();
+                        } else {
+                            totalExpense += Math.abs(transaction.getAmount());
+                        }
+
+                        // Format số tiền
+                        NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+                        String formattedAmount = currencyFormat.format(transaction.getAmount());
+
+                        // Lấy tháng từ ngày giao dịch
+                        String month = getMonthFromDate(transaction.getDate());
+
+                        // Tạo đối tượng TransactionItem_gd
+                        TransactionItem_gd item = new TransactionItem_gd(
+                                transaction.getId(),
+                                transaction.getTitle(),
+                                formattedAmount,
+                                formatDateTime(transaction.getDate()),
+                                type,
+                                category
+                        );
+
+                        // Thêm vào map theo tháng
+                        if (!transactionsByMonth.containsKey(month)) {
+                            transactionsByMonth.put(month, new ArrayList<>());
+                        }
+                        transactionsByMonth.get(month).add(item);
+                    }
+                }
+
+                // Sắp xếp các tháng theo thứ tự giảm dần (tháng mới nhất trước)
+                List<String> sortedMonths = new ArrayList<>(transactionsByMonth.keySet());
+                Collections.sort(sortedMonths, (m1, m2) -> {
+                    try {
+                        SimpleDateFormat sdf = new SimpleDateFormat("MM/yyyy", Locale.getDefault());
+                        Date date1 = sdf.parse(m1);
+                        Date date2 = sdf.parse(m2);
+                        return date2.compareTo(date1); // Sắp xếp giảm dần
+                    } catch (ParseException e) {
+                        return 0;
+                    }
+                });
+
+                // Thêm các giao dịch vào danh sách allTransactions theo thứ tự tháng
+                for (String month : sortedMonths) {
+                    // Thêm header tháng
+                    String monthName = getVietnameseMonthName(month);
+                    allTransactions.add(new TransactionItem_gd(monthName, true));
+
+                    // Sắp xếp giao dịch trong tháng theo ngày giảm dần
+                    List<TransactionItem_gd> monthTransactions = transactionsByMonth.get(month);
+                    Collections.sort(monthTransactions, (t1, t2) -> {
+                        try {
+                            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM", Locale.getDefault());
+                            Date date1 = sdf.parse(t1.getDate());
+                            Date date2 = sdf.parse(t2.getDate());
+                            return date2.compareTo(date1); // Sắp xếp giảm dần
+                        } catch (ParseException e) {
+                            return 0;
+                        }
+                    });
+
+                    // Thêm các giao dịch của tháng
+                    allTransactions.addAll(monthTransactions);
+                }
+
+                // Cập nhật UI
+                updateSummaryData();
+
+                // Hiển thị tất cả giao dịch ban đầu
+                adapter.setTransactions(allTransactions);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e(TAG, "Lỗi khi tải giao dịch: " + error.getMessage());
+                Toast.makeText(getContext(), "Lỗi khi tải giao dịch: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private String getMonthFromDate(String dateStr) {
+        try {
+            SimpleDateFormat inputFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+            Date date = inputFormat.parse(dateStr);
+            SimpleDateFormat outputFormat = new SimpleDateFormat("MM/yyyy", Locale.getDefault());
+            return outputFormat.format(date);
+        } catch (ParseException e) {
+            Log.e(TAG, "Lỗi khi phân tích ngày: " + e.getMessage());
+            return "01/2023"; // Giá trị mặc định nếu có lỗi
+        }
+    }
+
+    private String formatDateTime(String dateStr) {
+        try {
+            SimpleDateFormat inputFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+            Date date = inputFormat.parse(dateStr);
+
+            // Format lại thành "dd/MM" - chỉ hiển thị ngày và tháng, không hiển thị giờ
+            SimpleDateFormat outputFormat = new SimpleDateFormat("dd/MM", Locale.getDefault());
+            return outputFormat.format(date);
+        } catch (ParseException e) {
+            Log.e(TAG, "Lỗi khi định dạng ngày: " + e.getMessage());
+            return dateStr; // Trả về chuỗi gốc nếu có lỗi
+        }
+    }
+
+    private String getVietnameseMonthName(String monthYear) {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("MM/yyyy", Locale.getDefault());
+            Date date = sdf.parse(monthYear);
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(date);
+            int month = cal.get(Calendar.MONTH);
+            return monthNames[month];
+        } catch (ParseException e) {
+            Log.e(TAG, "Lỗi khi phân tích tháng: " + e.getMessage());
+            return "Tháng Không Xác Định";
+        }
+    }
+
+    private void updateSummaryData() {
+        // Format số tiền
+        NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+
+        // Cập nhật tổng thu nhập
+        tvIncome.setText(currencyFormat.format(totalIncome));
+
+        // Cập nhật tổng chi tiêu
+        tvExpense.setText(currencyFormat.format(totalExpense));
+
+        // Cập nhật tổng số dư
+        double balance = totalIncome - totalExpense;
+        tvTotalBalance.setText(currencyFormat.format(balance));
     }
 
     // Phương thức để bắt đầu cập nhật thời gian
@@ -325,54 +606,21 @@ public class GiaoDichFragment_gd extends Fragment implements TransactionAdapter_
         return result;
     }
 
-    private void loadSampleData() {
-        // Set summary data
-        tvTotalBalance.setText("$7,783.00");
-        tvIncome.setText("$4,120.00");
-        tvExpense.setText("$1,187.40");
-
-        // Create sample transactions
-        allTransactions = new ArrayList<>();
-
-        // Tháng Năm (hiển thị đầu tiên vì là tháng hiện tại)
-        allTransactions.add(new TransactionItem_gd("Tháng Năm", true));
-        allTransactions.add(new TransactionItem_gd("Lương", "15:30 - 30/5", "$4,200.00", R.drawable.ic_salary_gd, false));
-        allTransactions.add(new TransactionItem_gd("Tạp Hóa", "14:45 - 25/5", "-$120.50", R.drawable.ic_groceries_gd, false));
-        allTransactions.add(new TransactionItem_gd("Tiền Điện", "10:15 - 15/5", "-$48.30", R.drawable.ic_tax_gd, false));
-        allTransactions.add(new TransactionItem_gd("Tiền Nước", "10:10 - 15/5", "-$25.75", R.drawable.ic_tax_gd, false));
-        allTransactions.add(new TransactionItem_gd("Phương Tiện", "8:20 - 10/5", "-$15.60", R.drawable.ic_transportation_gd, false));
-        allTransactions.add(new TransactionItem_gd("Ăn Uống", "19:45 - 5/5", "-$35.25", R.drawable.ic_food_gd, false));
-
-        // Tháng Tư
-        allTransactions.add(new TransactionItem_gd("Tháng Tư", true));
-        allTransactions.add(new TransactionItem_gd("Lương", "18:27 - 30/4", "$4,000.00", R.drawable.ic_salary_gd, false));
-        allTransactions.add(new TransactionItem_gd("Tạp Hóa", "17:00 - 24/4", "-$100.00", R.drawable.ic_groceries_gd, false));
-        allTransactions.add(new TransactionItem_gd("Thuế", "8:30 - 15/4", "-$674.40", R.drawable.ic_tax_gd, false));
-        allTransactions.add(new TransactionItem_gd("Phương Tiện", "7:30 - 8/4", "-$4.13", R.drawable.ic_transportation_gd, false));
-
-        // Tháng Ba
-        allTransactions.add(new TransactionItem_gd("Tháng Ba", true));
-        allTransactions.add(new TransactionItem_gd("Thực Phẩm", "19:30 - 31/3", "-$70.40", R.drawable.ic_food_gd, false));
-        allTransactions.add(new TransactionItem_gd("Lương", "15:45 - 28/3", "$3,800.00", R.drawable.ic_salary_gd, false));
-        allTransactions.add(new TransactionItem_gd("Mua Sắm", "14:20 - 20/3", "-$250.30", R.drawable.ic_groceries_gd, false));
-        allTransactions.add(new TransactionItem_gd("Tiền Điện", "9:15 - 15/3", "-$45.75", R.drawable.ic_tax_gd, false));
-        allTransactions.add(new TransactionItem_gd("Tiền Nước", "9:10 - 15/3", "-$22.50", R.drawable.ic_tax_gd, false));
-
-        // Tháng Hai
-        allTransactions.add(new TransactionItem_gd("Tháng Hai", true));
-        allTransactions.add(new TransactionItem_gd("Lương", "16:30 - 28/2", "$3,800.00", R.drawable.ic_salary_gd, false));
-        allTransactions.add(new TransactionItem_gd("Thực Phẩm", "18:45 - 25/2", "-$85.20", R.drawable.ic_food_gd, false));
-        allTransactions.add(new TransactionItem_gd("Phương Tiện", "7:30 - 20/2", "-$12.50", R.drawable.ic_transportation_gd, false));
-        allTransactions.add(new TransactionItem_gd("Mua Sắm", "13:15 - 15/2", "-$120.75", R.drawable.ic_groceries_gd, false));
-
-        // Hiển thị tất cả giao dịch ban đầu
-        adapter.setTransactions(allTransactions);
-    }
-
     @Override
     public void onEditClick(TransactionItem_gd transaction, int position) {
-        Toast.makeText(getContext(), "Chỉnh sửa: " + transaction.getName(), Toast.LENGTH_SHORT).show();
-        // Thêm code để mở màn hình chỉnh sửa giao dịch
+        // Tạo Intent để mở màn hình chỉnh sửa giao dịch
+        Intent intent = new Intent(getActivity(), ThemMoiGiaoDich.class);
+
+        // Truyền thông tin giao dịch cần chỉnh sửa
+        intent.putExtra("TRANSACTION_ID", transaction.getId());
+        intent.putExtra("TRANSACTION_TITLE", transaction.getName());
+        intent.putExtra("TRANSACTION_AMOUNT", transaction.getAmount().replace("₫", "").trim());
+        intent.putExtra("TRANSACTION_DATE", transaction.getDate());
+        intent.putExtra("TRANSACTION_CATEGORY", transaction.getCategory());
+        intent.putExtra("IS_EDITING", true);
+
+        // Mở màn hình chỉnh sửa
+        startActivity(intent);
     }
 
     @Override
@@ -381,24 +629,15 @@ public class GiaoDichFragment_gd extends Fragment implements TransactionAdapter_
                 .setTitle("Xóa giao dịch")
                 .setMessage("Bạn có chắc chắn muốn xóa giao dịch này?")
                 .setPositiveButton("Xóa", (dialog, which) -> {
-                    // Xóa giao dịch khỏi danh sách
-                    List<TransactionItem_gd> currentList = new ArrayList<>(adapter.getTransactions());
-                    currentList.remove(position);
-
-                    // Cập nhật danh sách hiển thị
-                    adapter.setTransactions(currentList);
-
-                    // Cập nhật danh sách gốc
-                    for (int i = 0; i < allTransactions.size(); i++) {
-                        if (!allTransactions.get(i).isHeader() &&
-                                allTransactions.get(i).getName().equals(transaction.getName()) &&
-                                allTransactions.get(i).getDate().equals(transaction.getDate())) {
-                            allTransactions.remove(i);
-                            break;
-                        }
-                    }
-
-                    Toast.makeText(getContext(), "Đã xóa: " + transaction.getName(), Toast.LENGTH_SHORT).show();
+                    // Xóa giao dịch khỏi Firebase
+                    mDatabase.child("Transactions").child(transaction.getId()).removeValue()
+                            .addOnSuccessListener(aVoid -> {
+                                Toast.makeText(getContext(), "Đã xóa: " + transaction.getName(), Toast.LENGTH_SHORT).show();
+                                // Không cần cập nhật UI vì ValueEventListener sẽ tự động cập nhật
+                            })
+                            .addOnFailureListener(e -> {
+                                Toast.makeText(getContext(), "Lỗi khi xóa: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            });
                 })
                 .setNegativeButton("Hủy", null)
                 .show();

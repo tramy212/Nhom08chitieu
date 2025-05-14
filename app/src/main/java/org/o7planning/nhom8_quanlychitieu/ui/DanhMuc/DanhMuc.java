@@ -138,12 +138,25 @@ public class DanhMuc extends Fragment implements DanhMucAdapter.OnItemClickListe
             String moTa = data.getStringExtra("moTa");
             String icon = data.getStringExtra("icon");
             String mauSac = data.getStringExtra("mauSac");
+            String loai = data.getStringExtra("loai"); // Lấy loại danh mục
 
             // Tạo danh mục mới
             DanhMucModel newDanhMuc = new DanhMucModel(id, ten, moTa);
             newDanhMuc.setIcon(icon);
             if (mauSac != null) {
                 newDanhMuc.setMauSac(mauSac);
+            }
+            if (loai != null) {
+                newDanhMuc.setLoai(loai);
+            } else {
+                // Nếu không có loại, đặt mặc định dựa trên tên
+                String tenLowerCase = ten.toLowerCase();
+                if (tenLowerCase.contains("lương") || tenLowerCase.contains("thu nhập") ||
+                        tenLowerCase.contains("tiền thưởng") || tenLowerCase.contains("tiền lãi")) {
+                    newDanhMuc.setLoai("income");
+                } else {
+                    newDanhMuc.setLoai("expense");
+                }
             }
 
             // Thêm danh mục mới vào Firebase
@@ -161,7 +174,6 @@ public class DanhMuc extends Fragment implements DanhMucAdapter.OnItemClickListe
             }
         }
     }
-
     @Override
     public void onDeleteClick(int position) {
         if (position >= 0 && position < danhMucList.size() - 1) { // Không xóa nút "Thêm"
