@@ -8,12 +8,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -23,14 +26,16 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import org.o7planning.nhom8_quanlychitieu.R;
+//import org.o7planning.nhom8_quanlychitieu.adapter.TransactionAdapter;
 import org.o7planning.nhom8_quanlychitieu.models.Transaction;
 import org.o7planning.nhom8_quanlychitieu.ui.DanhMuc.DanhMucModel;
+import org.o7planning.nhom8_quanlychitieu.ui.PhanTich.MonthPickerDialog;
+import org.o7planning.nhom8_quanlychitieu.utils.CurrencyFormatter;
+import org.o7planning.nhom8_quanlychitieu.utils.DateUtils;
 
-import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -55,10 +60,15 @@ public class TrangChu extends Fragment {
     private TextView tvTotalExpense;
     private TextView tvMonthlyIncome;
     private TextView tvMonthlyExpense;
+    private TextView tvMonthTitle;
     private RecyclerView rvRecentTransactions;
     private ImageView ivNotification;
     private TextView tvTime;
     private View statusBarPlaceholder;
+    private CardView cardMonthlySummary;
+    private View layoutMonthSelector;
+    private ImageView ivMonthSelector;
+    private TextView tvTotalIncome;
 
     // Adapter
     private HomeTransactionAdapter adapter;
@@ -75,6 +85,11 @@ public class TrangChu extends Fragment {
     private double totalExpense = 0;
     private double monthlyIncome = 0;
     private double monthlyExpense = 0;
+    private double salaryIncome = 0; // New variable to track salary income
+
+    // Selected month and year
+    private int selectedMonth;
+    private int selectedYear;
 
     // Timer for clock
     private Timer timer;
@@ -89,6 +104,11 @@ public class TrangChu extends Fragment {
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
         danhMucRef = FirebaseDatabase.getInstance().getReference("DanhMuc");
+
+        // Get current month and year
+        Calendar calendar = Calendar.getInstance();
+        selectedMonth = calendar.get(Calendar.MONTH) + 1; // Calendar months are 0-based
+        selectedYear = calendar.get(Calendar.YEAR);
 
         // Initialize UI components
         initializeUI(root);
@@ -114,9 +134,14 @@ public class TrangChu extends Fragment {
         tvTotalExpense = root.findViewById(R.id.tv_total_expense);
         tvMonthlyIncome = root.findViewById(R.id.tv_monthly_income);
         tvMonthlyExpense = root.findViewById(R.id.tv_monthly_expense);
+        tvMonthTitle = root.findViewById(R.id.tv_month_title);
         rvRecentTransactions = root.findViewById(R.id.rv_recent_transactions);
         ivNotification = root.findViewById(R.id.iv_notification);
         statusBarPlaceholder = root.findViewById(R.id.status_bar_placeholder);
+        cardMonthlySummary = root.findViewById(R.id.card_monthly_summary);
+        layoutMonthSelector = root.findViewById(R.id.layout_month_selector);
+        ivMonthSelector = root.findViewById(R.id.iv_month_selector);
+        tvTotalIncome = root.findViewById(R.id.tv_total_income);
 
         // Find time TextView in status bar
         View statusBarView = statusBarPlaceholder;
@@ -126,6 +151,44 @@ public class TrangChu extends Fragment {
         ivNotification.setOnClickListener(v -> {
             Toast.makeText(getContext(), "Thông báo", Toast.LENGTH_SHORT).show();
         });
+
+        // Setup monthly summary card click
+        cardMonthlySummary.setOnClickListener(v -> {
+            navigateToPhanTichFragment();
+        });
+
+        // Setup month selector click - FIXED: Now shows month picker dialog
+        ivMonthSelector.setOnClickListener(v -> {
+            showMonthPickerDialog();
+        });
+
+        // Setup month selector layout click - FIXED: Now shows month picker dialog
+        layoutMonthSelector.setOnClickListener(v -> {
+            showMonthPickerDialog();
+        });
+
+        // Setup month title click - FIXED: Now navigates to analysis screen
+        tvMonthTitle.setOnClickListener(v -> {
+            navigateToPhanTichFragment();
+        });
+
+        // Set month title
+        updateMonthTitle();
+    }
+
+    private void updateMonthTitle() {
+        String monthName = new DateUtils().getMonthName(selectedMonth);
+        tvMonthTitle.setText("Tổng Quan Tháng " + monthName);
+    }
+
+    private void navigateToPhanTichFragment() {
+        // Create bundle to pass selected month and year to PhanTichFragment
+        Bundle args = new Bundle();
+        args.putInt("selectedMonth", selectedMonth);
+        args.putInt("selectedYear", selectedYear);
+
+        // Navigate to PhanTichFragment using the correct action ID from mobile_navigation.xml
+        Navigation.findNavController(requireView()).navigate(R.id.action_navigation_home_to_phanTichFragment, args);
     }
 
     private void setupRecyclerView() {
@@ -245,11 +308,6 @@ public class TrangChu extends Fragment {
         String userId = currentUser.getUid();
         DatabaseReference transactionsRef = mDatabase.child("Transactions");
 
-        // Get current month and year
-        Calendar calendar = Calendar.getInstance();
-        int currentMonth = calendar.get(Calendar.MONTH) + 1; // Calendar months are 0-based
-        int currentYear = calendar.get(Calendar.YEAR);
-
         transactionsRef.orderByChild("userId").equalTo(userId).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -258,6 +316,7 @@ public class TrangChu extends Fragment {
                 totalExpense = 0;
                 monthlyIncome = 0;
                 monthlyExpense = 0;
+                salaryIncome = 0; // Reset salary income
 
                 // Map to group transactions by date
                 Map<String, List<HomeTransactionItem>> transactionsByDate = new HashMap<>();
@@ -288,6 +347,11 @@ public class TrangChu extends Fragment {
                         // Update total income and expense
                         if (transaction.getAmount() >= 0) {
                             totalIncome += transaction.getAmount();
+
+                            // Check if this is a salary income
+                            if (category.toLowerCase().contains("lương")) {
+                                salaryIncome += transaction.getAmount();
+                            }
                         } else {
                             totalExpense += Math.abs(transaction.getAmount());
                         }
@@ -301,7 +365,7 @@ public class TrangChu extends Fragment {
                             int transactionMonth = transactionCal.get(Calendar.MONTH) + 1;
                             int transactionYear = transactionCal.get(Calendar.YEAR);
 
-                            if (transactionMonth == currentMonth && transactionYear == currentYear) {
+                            if (transactionMonth == selectedMonth && transactionYear == selectedYear) {
                                 // Update monthly income and expense
                                 if (transaction.getAmount() >= 0) {
                                     monthlyIncome += transaction.getAmount();
@@ -314,8 +378,8 @@ public class TrangChu extends Fragment {
                         }
 
                         // Format amount
-                        NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
-                        String formattedAmount = currencyFormat.format(transaction.getAmount());
+                        CurrencyFormatter formatter = new CurrencyFormatter();
+                        String formattedAmount = formatter.formatCurrency(transaction.getAmount());
 
                         // Create HomeTransactionItem
                         HomeTransactionItem item = new HomeTransactionItem(
@@ -377,23 +441,42 @@ public class TrangChu extends Fragment {
     }
 
     private void updateUI() {
-        // Format currency
-        NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+        // Kiểm tra xem Fragment có còn gắn với Activity không
+        if (!isAdded() || getView() == null) {
+            Log.d(TAG, "updateUI: Fragment not attached or view is null");
+            return;
+        }
 
-        // Update total balance
-        tvTotalBalance.setText(currencyFormat.format(totalIncome - totalExpense));
+        // Format currency
+        CurrencyFormatter formatter = new CurrencyFormatter();
+
+        // Update total balance (using salary income instead of total income)
+        tvTotalBalance.setText(formatter.formatCurrency(salaryIncome - totalExpense));
+
+        // Update total income (now showing only salary income)
+        if (tvTotalIncome != null) {
+            tvTotalIncome.setText(formatter.formatCurrency(salaryIncome));
+        }
 
         // Update total expense
-        tvTotalExpense.setText(currencyFormat.format(-totalExpense));
+        if (tvTotalExpense != null) {
+            tvTotalExpense.setText(formatter.formatCurrency(-totalExpense));
+        }
 
         // Update monthly income
-        tvMonthlyIncome.setText(currencyFormat.format(monthlyIncome));
+        if (tvMonthlyIncome != null) {
+            tvMonthlyIncome.setText(formatter.formatCurrency(monthlyIncome));
+        }
 
         // Update monthly expense
-        tvMonthlyExpense.setText(currencyFormat.format(monthlyExpense));
+        if (tvMonthlyExpense != null) {
+            tvMonthlyExpense.setText(formatter.formatCurrency(monthlyExpense));
+        }
 
         // Update adapter
-        adapter.notifyDataSetChanged();
+        if (adapter != null) {
+            adapter.notifyDataSetChanged();
+        }
     }
 
     private void startClock() {
@@ -410,6 +493,16 @@ public class TrangChu extends Fragment {
                 });
             }
         }, 0, 60000); // Update every minute
+    }
+
+    public void showMonthPickerDialog() {
+        MonthPickerDialog dialog = new MonthPickerDialog(getContext(), selectedMonth, selectedYear, (month, year) -> {
+            selectedMonth = month;
+            selectedYear = year;
+            updateMonthTitle();
+            loadTransactions();
+        });
+        dialog.show();
     }
 
     @Override

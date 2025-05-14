@@ -36,7 +36,17 @@
         android:id="@+id/trangchu"
         android:name="org.o7planning.nhom8_quanlychitieu.ui.TrangChu.TrangChu"
         android:label="Trang chủ"
-        tools:layout="@layout/fragment_trang_chu" />
+        tools:layout="@layout/fragment_trang_chu">
+        <action
+            android:id="@+id/action_navigation_home_to_phanTichFragment"
+            app:destination="@id/phanTichFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/phanTichFragment"
+        android:name="org.o7planning.nhom8_quanlychitieu.ui.PhanTich.PhanTichFragment"
+        android:label="Phân Tích"
+        tools:layout="@layout/fragment_phan_tich" />
 
     <fragment
         android:id="@+id/giaodich"
@@ -68,6 +78,12 @@
             android:id="@+id/action_hoso_to_passwordSettings"
             app:destination="@id/passwordSettings" />
         <action
+            android:id="@+id/action_hoso_to_termsSettings"
+            app:destination="@id/termsSettings" />
+        <action
+            android:id="@+id/action_hoso_to_logoutConfirmation"
+            app:destination="@id/logoutConfirmation" />
+        <action
             android:id="@+id/action_hoso_to_dangnhap"
             app:destination="@id/dangnhap"
             app:popUpTo="@id/mobile_navigation"
@@ -86,4 +102,21 @@
         android:label="Cài Đặt Mật Khẩu"
         tools:layout="@layout/fragment_password_settings" />
 
+    <fragment
+        android:id="@+id/termsSettings"
+        android:name="org.o7planning.nhom8_quanlychitieu.ui.HoSo.TermsSettingsFragment"
+        android:label="Điều Khoản và Điều Kiện"
+        tools:layout="@layout/fragment_terms_settings" />
+
+    <fragment
+        android:id="@+id/logoutConfirmation"
+        android:name="org.o7planning.nhom8_quanlychitieu.ui.HoSo.LogoutConfirmationFragment"
+        android:label="Đăng Xuất"
+        tools:layout="@layout/fragment_logout_confirmation">
+        <action
+            android:id="@+id/action_logoutConfirmation_to_dangnhap"
+            app:destination="@id/dangnhap"
+            app:popUpTo="@id/mobile_navigation"
+            app:popUpToInclusive="true" />
+    </fragment>
 </navigation>

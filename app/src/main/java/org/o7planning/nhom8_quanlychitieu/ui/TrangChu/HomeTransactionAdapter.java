@@ -131,6 +131,23 @@ public class HomeTransactionAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
             // Set amount
             tvAmount.setText(transaction.getAmount());
+
+            // Add click animation
+            itemView.setOnClickListener(v -> {
+                // Add click effect
+                v.animate()
+                        .scaleX(0.98f)
+                        .scaleY(0.98f)
+                        .setDuration(100)
+                        .withEndAction(() -> {
+                            v.animate()
+                                    .scaleX(1f)
+                                    .scaleY(1f)
+                                    .setDuration(100)
+                                    .start();
+                        })
+                        .start();
+            });
         }
 
         private String formatDate(String fullDate) {

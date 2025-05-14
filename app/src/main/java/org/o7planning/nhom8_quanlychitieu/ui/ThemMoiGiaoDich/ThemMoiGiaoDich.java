@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -20,8 +19,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.Navigation;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -34,7 +32,6 @@ import com.google.firebase.database.ValueEventListener;
 import org.o7planning.nhom8_quanlychitieu.R;
 import org.o7planning.nhom8_quanlychitieu.models.Transaction;
 import org.o7planning.nhom8_quanlychitieu.ui.DanhMuc.DanhMucModel;
-import org.o7planning.nhom8_quanlychitieu.ui.GiaoDich.GiaoDichFragment_gd;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -85,6 +82,29 @@ public class ThemMoiGiaoDich extends Fragment {
         danhMucRef = FirebaseDatabase.getInstance().getReference("DanhMuc");
 
         // Initialize UI components
+        initializeUI(root);
+
+        // Initialize calendar and date format
+        calendar = Calendar.getInstance();
+        dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+        etDate.setText(dateFormat.format(calendar.getTime()));
+
+        // Check if we're editing an existing transaction
+        checkForEditingMode();
+
+        // Set up click listeners
+        setupClickListeners();
+
+        // Load danh mục
+        loadDanhMuc();
+
+        // Thêm TextWatcher để xử lý số tiền
+        setupAmountTextWatcher();
+
+        return root;
+    }
+
+    private void initializeUI(View root) {
         etDate = root.findViewById(R.id.etDate);
         etAmount = root.findViewById(R.id.etAmount);
         etTitle = root.findViewById(R.id.etTitle);
@@ -94,13 +114,9 @@ public class ThemMoiGiaoDich extends Fragment {
         btnSave = root.findViewById(R.id.btnSave);
         danhMucContainer = root.findViewById(R.id.danhMucContainer);
         backBtn = root.findViewById(R.id.backBtn);
+    }
 
-        // Initialize calendar and date format
-        calendar = Calendar.getInstance();
-        dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-        etDate.setText(dateFormat.format(calendar.getTime()));
-
-        // Check if we're editing an existing transaction
+    private void checkForEditingMode() {
         Bundle args = getArguments();
         if (args != null) {
             isEditing = args.getBoolean("IS_EDITING", false);
@@ -158,17 +174,6 @@ public class ThemMoiGiaoDich extends Fragment {
                 findCategoryIdByName(category);
             }
         }
-
-        // Set up click listeners
-        setupClickListeners();
-
-        // Load danh mục
-        loadDanhMuc();
-
-        // Thêm TextWatcher để xử lý số tiền
-        setupAmountTextWatcher();
-
-        return root;
     }
 
     private void loadOriginalTransaction(String transactionId) {
@@ -315,28 +320,29 @@ public class ThemMoiGiaoDich extends Fragment {
         });
     }
 
-    // Phương thức mới để điều hướng về trang chủ giao dịch
+    // Phương thức cải tiến để điều hướng về trang giao dịch
     private void navigateToGiaoDichFragment() {
-        if (getActivity() != null) {
-            // Tạo instance mới của GiaoDichFragment_gd
-            GiaoDichFragment_gd giaoDichFragment = new GiaoDichFragment_gd();
+        try {
+            // Kiểm tra Fragment có còn gắn với Activity không
+            if (isAdded() && getView() != null) {
+                // Sử dụng Navigation Component để điều hướng
+                Navigation.findNavController(requireView()).navigate(R.id.giaodich);
+            } else {
+                Log.e(TAG, "navigateToGiaoDichFragment: Fragment not attached or view is null");
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Lỗi khi điều hướng: " + e.getMessage());
 
-            // Thay thế Fragment hiện tại bằng GiaoDichFragment_gd
-            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-
-            // Xóa tất cả các Fragment trong back stack
-            fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-
-            // Thêm GiaoDichFragment_gd vào container
-            fragmentManager.beginTransaction()
-                    .replace(R.id.nav_host_fragment, giaoDichFragment)
-                    .commit();
+            // Fallback: Sử dụng onBackPressed nếu Navigation không hoạt động
+            if (getActivity() != null) {
+                getActivity().onBackPressed();
+            }
         }
     }
 
     private void showDatePickerDialog() {
         DatePickerDialog datePickerDialog = new DatePickerDialog(
-                getContext(),
+                requireContext(),
                 (view, year, month, dayOfMonth) -> {
                     calendar.set(Calendar.YEAR, year);
                     calendar.set(Calendar.MONTH, month);
@@ -385,7 +391,9 @@ public class ThemMoiGiaoDich extends Fragment {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 Log.e(TAG, "Lỗi khi tải danh mục: " + error.getMessage());
-                Toast.makeText(getContext(), "Lỗi khi tải danh mục: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                if (isAdded() && getContext() != null) {
+                    Toast.makeText(getContext(), "Lỗi khi tải danh mục: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
@@ -413,7 +421,14 @@ public class ThemMoiGiaoDich extends Fragment {
     }
 
     private void showDanhMucDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        if (danhMucMap.isEmpty()) {
+            if (isAdded() && getContext() != null) {
+                Toast.makeText(getContext(), "Đang tải danh mục...", Toast.LENGTH_SHORT).show();
+            }
+            return;
+        }
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
         builder.setTitle("Chọn Danh Mục");
 
         // Convert map to array for dialog
@@ -442,6 +457,12 @@ public class ThemMoiGiaoDich extends Fragment {
     }
 
     private void saveTransaction() {
+        // Kiểm tra Fragment có còn gắn với Activity không
+        if (!isAdded()) {
+            Log.e(TAG, "saveTransaction: Fragment not attached");
+            return;
+        }
+
         String title = etTitle.getText().toString().trim();
         String amountStr = etAmount.getText().toString().trim();
         String date = etDate.getText().toString().trim();
@@ -486,7 +507,9 @@ public class ThemMoiGiaoDich extends Fragment {
                     isIncome = danhMuc.isIncome();
                 }
             } else {
-                Toast.makeText(getContext(), "Vui lòng chọn danh mục", Toast.LENGTH_SHORT).show();
+                if (isAdded() && getContext() != null) {
+                    Toast.makeText(getContext(), "Vui lòng chọn danh mục", Toast.LENGTH_SHORT).show();
+                }
                 return;
             }
         }
@@ -507,7 +530,9 @@ public class ThemMoiGiaoDich extends Fragment {
         // Get current user
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser == null) {
-            Toast.makeText(getContext(), "Vui lòng đăng nhập để thêm giao dịch", Toast.LENGTH_SHORT).show();
+            if (isAdded() && getContext() != null) {
+                Toast.makeText(getContext(), "Vui lòng đăng nhập để thêm giao dịch", Toast.LENGTH_SHORT).show();
+            }
             return;
         }
 
@@ -520,17 +545,28 @@ public class ThemMoiGiaoDich extends Fragment {
         transaction.setDanhMucId(selectedDanhMucId);
         transaction.setUserId(currentUser.getUid());
 
+        // Lưu tham chiếu đến Fragment hiện tại
+        final Fragment currentFragment = this;
+
         // Save to Firebase
         if (isEditing && !transactionId.isEmpty()) {
             // Update existing transaction
             transaction.setId(transactionId);
             mDatabase.child("Transactions").child(transactionId).setValue(transaction)
                     .addOnSuccessListener(aVoid -> {
-                        Toast.makeText(getContext(), "Giao dịch đã được cập nhật", Toast.LENGTH_SHORT).show();
-                        navigateToGiaoDichFragment();
+                        if (currentFragment.isAdded() && getContext() != null) {
+                            Toast.makeText(getContext(), "Giao dịch đã được cập nhật", Toast.LENGTH_SHORT).show();
+                        }
+
+                        // Chỉ điều hướng nếu Fragment vẫn còn gắn với Activity
+                        if (currentFragment.isAdded()) {
+                            navigateToGiaoDichFragment();
+                        }
                     })
                     .addOnFailureListener(e -> {
-                        Toast.makeText(getContext(), "Lỗi: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        if (currentFragment.isAdded() && getContext() != null) {
+                            Toast.makeText(getContext(), "Lỗi: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
                     });
         } else {
             // Add new transaction
@@ -539,12 +575,20 @@ public class ThemMoiGiaoDich extends Fragment {
                 transaction.setId(key);
                 mDatabase.child("Transactions").child(key).setValue(transaction)
                         .addOnSuccessListener(aVoid -> {
-                            Toast.makeText(getContext(), "Giao dịch đã được thêm", Toast.LENGTH_SHORT).show();
-                            clearForm();
-                            navigateToGiaoDichFragment();
+                            if (currentFragment.isAdded() && getContext() != null) {
+                                Toast.makeText(getContext(), "Giao dịch đã được thêm", Toast.LENGTH_SHORT).show();
+                            }
+
+                            // Chỉ điều hướng nếu Fragment vẫn còn gắn với Activity
+                            if (currentFragment.isAdded()) {
+                                clearForm();
+                                navigateToGiaoDichFragment();
+                            }
                         })
                         .addOnFailureListener(e -> {
-                            Toast.makeText(getContext(), "Lỗi: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            if (currentFragment.isAdded() && getContext() != null) {
+                                Toast.makeText(getContext(), "Lỗi: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
                         });
             }
         }
@@ -559,5 +603,11 @@ public class ThemMoiGiaoDich extends Fragment {
         selectedDanhMucName = "";
         calendar = Calendar.getInstance();
         etDate.setText(dateFormat.format(calendar.getTime()));
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        // Hủy bỏ các listener nếu cần
     }
 }

@@ -209,47 +209,9 @@
                 android:layout_height="1dp"
                 android:background="#E0E0E0" />
 
-            <!-- Language Settings -->
+            <!-- Terms and Conditions -->
             <LinearLayout
-                android:id="@+id/languageSettings"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="?attr/selectableItemBackground"
-                android:clickable="true"
-                android:focusable="true"
-                android:orientation="horizontal"
-                android:padding="16dp">
-
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@drawable/ic_language"
-                    app:tint="#4285F4" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_weight="1"
-                    android:text="Ngôn Ngữ"
-                    android:textColor="@android:color/black"
-                    android:textSize="16sp" />
-
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@drawable/ic_arrow_right"
-                    app:tint="#757575" />
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#E0E0E0" />
-
-            <!-- About -->
-            <LinearLayout
-                android:id="@+id/aboutSettings"
+                android:id="@+id/termsSettings"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="?attr/selectableItemBackground"
@@ -269,7 +231,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_weight="1"
-                    android:text="Thông Tin Ứng Dụng"
+                    android:text="Điều Khoản và Điều Kiện"
                     android:textColor="@android:color/black"
                     android:textSize="16sp" />
 
