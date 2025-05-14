@@ -12,5 +12,6 @@
     <color name="gd_light_blue_background">#84D1E9</color>
     <color name="gd_income_green">#4CAF50</color>
     <color name="gd_expense_red">#F44336</color>
-    <color name="gd_gray">#757575</color>
+    <color name="gd_gray">#757575</color><!-- Màu mới để highlight giao dịch khi tìm kiếm -->
+    <color name="gd_highlight_color">#FFEB3B</color>
 </resources>

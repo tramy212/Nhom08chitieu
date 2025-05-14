@@ -703,7 +703,7 @@ public class GiaoDichFragment_gd extends Fragment implements TransactionAdapter_
                         selectedDate.set(year, monthOfYear, dayOfMonth);
 
                         // Format ngày đã chọn
-                        SimpleDateFormat sdf = new SimpleDateFormat("d/M", Locale.getDefault());
+                        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM", Locale.getDefault());
                         String dateString = sdf.format(selectedDate.getTime());
 
                         // Tìm giao dịch có ngày tương ứng
@@ -724,19 +724,71 @@ public class GiaoDichFragment_gd extends Fragment implements TransactionAdapter_
         List<TransactionItem_gd> transactions = adapter.getTransactions();
         boolean found = false;
 
+        // Chuẩn hóa định dạng ngày tháng để so sánh
+        String normalizedSearchDate = normalizeDate(dateString);
+
+        Log.d(TAG, "Tìm kiếm giao dịch cho ngày: " + normalizedSearchDate);
+
         for (int i = 0; i < transactions.size(); i++) {
             TransactionItem_gd item = transactions.get(i);
-            if (!item.isHeader() && item.getDate().contains(dateString)) {
-                // Nếu tìm thấy giao dịch có ngày tương ứng, cuộn đến vị trí đó
-                rvTransactions.smoothScrollToPosition(i);
-                found = true;
-                break;
+            if (!item.isHeader()) {
+                // Chuẩn hóa ngày của giao dịch để so sánh
+                String transactionDate = normalizeDate(item.getDate());
+
+                Log.d(TAG, "So sánh với giao dịch ngày: " + transactionDate + " - " + item.getName());
+
+                if (transactionDate.equals(normalizedSearchDate)) {
+                    // Nếu tìm thấy giao dịch có ngày tương ứng, cuộn đến vị trí đó
+                    rvTransactions.smoothScrollToPosition(i);
+
+                    // Highlight giao dịch (có thể thêm hiệu ứng highlight nếu cần)
+                    highlightTransaction(i);
+
+                    found = true;
+                    Log.d(TAG, "Đã tìm thấy giao dịch: " + item.getName());
+                    break;
+                }
             }
         }
 
         if (!found) {
             // Nếu không tìm thấy giao dịch nào, hiển thị thông báo
             Toast.makeText(getContext(), "Không có giao dịch nào vào ngày " + dateString, Toast.LENGTH_SHORT).show();
+            Log.d(TAG, "Không tìm thấy giao dịch nào cho ngày " + dateString);
+        }
+    }
+
+    // Phương thức mới để chuẩn hóa định dạng ngày tháng
+    private String normalizeDate(String dateStr) {
+        // Loại bỏ khoảng trắng và chuẩn hóa định dạng
+        dateStr = dateStr.trim();
+
+        // Đảm bảo định dạng dd/MM
+        String[] parts = dateStr.split("/");
+        if (parts.length >= 2) {
+            // Thêm số 0 phía trước nếu ngày hoặc tháng chỉ có 1 chữ số
+            String day = parts[0].length() == 1 ? "0" + parts[0] : parts[0];
+            String month = parts[1].length() == 1 ? "0" + parts[1] : parts[1];
+
+            return day + "/" + month;
+        }
+
+        return dateStr;
+    }
+
+    // Phương thức để highlight giao dịch được tìm thấy
+    private void highlightTransaction(int position) {
+        // Lấy ViewHolder của item tại vị trí position
+        RecyclerView.ViewHolder holder = rvTransactions.findViewHolderForAdapterPosition(position);
+
+        if (holder != null && holder.itemView != null) {
+            // Tạo hiệu ứng highlight
+            holder.itemView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.gd_highlight_color));
+
+            // Sau 1 giây, bỏ highlight
+            new Handler().postDelayed(() -> {
+                holder.itemView.setBackgroundColor(Color.TRANSPARENT);
+            }, 1000);
         }
     }
 }
