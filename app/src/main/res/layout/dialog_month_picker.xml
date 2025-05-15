@@ -1,247 +1,253 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:background="@android:color/white"
     android:orientation="vertical"
-    android:padding="16dp"
-    android:background="@android:color/white">
+    android:padding="16dp">
 
+    <!-- Phần đầu hiển thị năm và nút điều hướng -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:layout_marginBottom="16dp">
+        android:orientation="horizontal"
+        android:paddingBottom="12dp">
 
         <ImageView
             android:id="@+id/iv_prev_year"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:src="@android:drawable/ic_media_previous"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:clickable="true"
-            android:focusable="true"
-            android:padding="4dp" />
+            android:contentDescription="Năm trước"
+            android:padding="6dp"
+            android:src="@drawable/ic_chevron_left_black_24dp" />
 
         <TextView
             android:id="@+id/tv_year"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="2023"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:textColor="#000000"
-            android:gravity="center" />
+            android:gravity="center"
+            android:text="2025"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
         <ImageView
             android:id="@+id/iv_next_year"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:src="@android:drawable/ic_media_next"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:clickable="true"
-            android:focusable="true"
-            android:padding="4dp" />
+            android:contentDescription="Năm sau"
+            android:padding="6dp"
+            android:src="@drawable/ic_chevron_right_black_24dp" />
     </LinearLayout>
 
+    <!-- Grid các tháng -->
     <GridLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:columnCount="3"
-        android:rowCount="4"
-        android:layout_marginBottom="16dp">
+        android:rowCount="4">
 
+        <!-- Tháng 1 -->
         <TextView
             android:id="@+id/month_1"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_columnWeight="1"
-            android:layout_margin="4dp"
-            android:background="@drawable/month_button_background"
-            android:clickable="true"
-            android:focusable="true"
+            android:background="@drawable/month_background"
             android:gravity="center"
-            android:padding="12dp"
+            android:padding="10dp"
+            android:layout_margin="4dp"
+            android:minWidth="80dp"
             android:text="Tháng 1"
-            android:textColor="#757575" />
+            android:textColor="@android:color/black"
+            android:textSize="14sp" />
 
+        <!-- Tháng 2 -->
         <TextView
             android:id="@+id/month_2"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_columnWeight="1"
-            android:layout_margin="4dp"
-            android:background="@drawable/month_button_background"
-            android:clickable="true"
-            android:focusable="true"
+            android:background="@drawable/month_background"
             android:gravity="center"
-            android:padding="12dp"
+            android:padding="10dp"
+            android:layout_margin="4dp"
+            android:minWidth="80dp"
             android:text="Tháng 2"
-            android:textColor="#757575" />
+            android:textColor="@android:color/black"
+            android:textSize="14sp" />
 
+        <!-- Tháng 3 -->
         <TextView
             android:id="@+id/month_3"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_columnWeight="1"
-            android:layout_margin="4dp"
-            android:background="@drawable/month_button_background"
-            android:clickable="true"
-            android:focusable="true"
+            android:background="@drawable/month_background"
             android:gravity="center"
-            android:padding="12dp"
+            android:padding="10dp"
+            android:layout_margin="4dp"
+            android:minWidth="80dp"
             android:text="Tháng 3"
-            android:textColor="#757575" />
+            android:textColor="@android:color/black"
+            android:textSize="14sp" />
 
+        <!-- Tháng 4 -->
         <TextView
             android:id="@+id/month_4"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_columnWeight="1"
-            android:layout_margin="4dp"
-            android:background="@drawable/month_button_background"
-            android:clickable="true"
-            android:focusable="true"
+            android:background="@drawable/month_background"
             android:gravity="center"
-            android:padding="12dp"
+            android:padding="10dp"
+            android:layout_margin="4dp"
+            android:minWidth="80dp"
             android:text="Tháng 4"
-            android:textColor="#757575" />
+            android:textColor="@android:color/black"
+            android:textSize="14sp" />
 
+        <!-- Tháng 5 (được chọn) -->
         <TextView
             android:id="@+id/month_5"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_columnWeight="1"
-            android:layout_margin="4dp"
-            android:background="@drawable/month_button_background"
-            android:clickable="true"
-            android:focusable="true"
+            android:background="@drawable/month_selected_background"
             android:gravity="center"
-            android:padding="12dp"
+            android:padding="10dp"
+            android:layout_margin="4dp"
+            android:minWidth="80dp"
             android:text="Tháng 5"
-            android:textColor="#757575" />
+            android:textColor="#2196F3"
+            android:textSize="14sp" />
 
+        <!-- Tháng 6 -->
         <TextView
             android:id="@+id/month_6"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_columnWeight="1"
-            android:layout_margin="4dp"
-            android:background="@drawable/month_button_background"
-            android:clickable="true"
-            android:focusable="true"
+            android:background="@drawable/month_background"
             android:gravity="center"
-            android:padding="12dp"
+            android:padding="10dp"
+            android:layout_margin="4dp"
+            android:minWidth="80dp"
             android:text="Tháng 6"
-            android:textColor="#757575" />
+            android:textColor="@android:color/black"
+            android:textSize="14sp" />
 
+        <!-- Tháng 7 -->
         <TextView
             android:id="@+id/month_7"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_columnWeight="1"
-            android:layout_margin="4dp"
-            android:background="@drawable/month_button_background"
-            android:clickable="true"
-            android:focusable="true"
+            android:background="@drawable/month_background"
             android:gravity="center"
-            android:padding="12dp"
+            android:padding="10dp"
+            android:layout_margin="4dp"
+            android:minWidth="80dp"
             android:text="Tháng 7"
-            android:textColor="#757575" />
+            android:textColor="@android:color/black"
+            android:textSize="14sp" />
 
+        <!-- Tháng 8 -->
         <TextView
             android:id="@+id/month_8"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_columnWeight="1"
-            android:layout_margin="4dp"
-            android:background="@drawable/month_button_background"
-            android:clickable="true"
-            android:focusable="true"
+            android:background="@drawable/month_background"
             android:gravity="center"
-            android:padding="12dp"
+            android:padding="10dp"
+            android:layout_margin="4dp"
+            android:minWidth="80dp"
             android:text="Tháng 8"
-            android:textColor="#757575" />
+            android:textColor="@android:color/black"
+            android:textSize="14sp" />
 
+        <!-- Tháng 9 -->
         <TextView
             android:id="@+id/month_9"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_columnWeight="1"
-            android:layout_margin="4dp"
-            android:background="@drawable/month_button_background"
-            android:clickable="true"
-            android:focusable="true"
+            android:background="@drawable/month_background"
             android:gravity="center"
-            android:padding="12dp"
+            android:padding="10dp"
+            android:layout_margin="4dp"
+            android:minWidth="80dp"
             android:text="Tháng 9"
-            android:textColor="#757575" />
+            android:textColor="@android:color/black"
+            android:textSize="14sp" />
 
+        <!-- Tháng 10 -->
         <TextView
             android:id="@+id/month_10"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_columnWeight="1"
-            android:layout_margin="4dp"
-            android:background="@drawable/month_button_background"
-            android:clickable="true"
-            android:focusable="true"
+            android:background="@drawable/month_background"
             android:gravity="center"
-            android:padding="12dp"
+            android:padding="10dp"
+            android:layout_margin="4dp"
+            android:minWidth="80dp"
             android:text="Tháng 10"
-            android:textColor="#757575" />
+            android:textColor="@android:color/black"
+            android:textSize="14sp" />
 
+        <!-- Tháng 11 -->
         <TextView
             android:id="@+id/month_11"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_columnWeight="1"
-            android:layout_margin="4dp"
-            android:background="@drawable/month_button_background"
-            android:clickable="true"
-            android:focusable="true"
+            android:background="@drawable/month_background"
             android:gravity="center"
-            android:padding="12dp"
+            android:padding="10dp"
+            android:layout_margin="4dp"
+            android:minWidth="80dp"
             android:text="Tháng 11"
-            android:textColor="#757575" />
+            android:textColor="@android:color/black"
+            android:textSize="14sp" />
 
+        <!-- Tháng 12 -->
         <TextView
             android:id="@+id/month_12"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_columnWeight="1"
-            android:layout_margin="4dp"
-            android:background="@drawable/month_button_background"
-            android:clickable="true"
-            android:focusable="true"
+            android:background="@drawable/month_background"
             android:gravity="center"
-            android:padding="12dp"
+            android:padding="10dp"
+            android:layout_margin="4dp"
+            android:minWidth="80dp"
             android:text="Tháng 12"
-            android:textColor="#757575" />
+            android:textColor="@android:color/black"
+            android:textSize="14sp" />
     </GridLayout>
 
+    <!-- Nút hủy và xác nhận -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="end">
+        android:layout_marginTop="12dp"
+        android:gravity="end"
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/btn_cancel"
+            style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Hủy"
-            android:textColor="#2196F3"
-            android:background="?attr/selectableItemBackground"
-            android:layout_marginEnd="16dp" />
+            android:layout_height="40dp"
+            android:minWidth="80dp"
+            android:text="HỦY"
+            android:textColor="#757575"
+            android:textSize="14sp" />
 
         <Button
             android:id="@+id/btn_ok"
+            style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="OK"
-            android:textColor="#2196F3"
-            android:background="?attr/selectableItemBackground" />
+            android:layout_height="40dp"
+            android:layout_marginStart="8dp"
+            android:minWidth="80dp"
+            android:text="XÁC NHẬN"
+            android:textColor="@android:color/white"
+            android:textSize="14sp" />
     </LinearLayout>
 </LinearLayout>

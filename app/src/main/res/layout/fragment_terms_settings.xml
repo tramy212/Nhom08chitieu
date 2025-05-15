@@ -3,16 +3,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F5F5F5">
+    android:background="@drawable/home_gradient_background">
 
     <!-- Header -->
+
+    <!-- Terms and Conditions Card -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/common_google_signin_btn_text_dark"
+        android:layout_marginTop="16dp"
         android:paddingVertical="16dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -22,8 +25,8 @@
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-medium"
             android:text="Điều Khoản và Điều Kiện"
-            android:textColor="@android:color/white"
-            android:textSize="22sp"
+            android:textColor="@color/black"
+            android:textSize="25sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -35,16 +38,15 @@
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_marginStart="16dp"
-            android:padding="4dp"
             android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="4dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_back_arrow"
-            app:tint="@android:color/white" />
+            app:tint="@color/black" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <!-- Terms and Conditions Card -->
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -184,31 +186,4 @@
         </ScrollView>
     </androidx.cardview.widget.CardView>
 
-    <!-- Add a bottom navigation bar -->
-    <LinearLayout
-        android:id="@+id/bottomNavBar"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:background="@android:color/white"
-        android:elevation="8dp"
-        android:orientation="horizontal"
-        android:gravity="center"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <Button
-            android:id="@+id/btnBackToSettings"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:background="@drawable/rounded_button"
-            android:drawableStart="@drawable/ic_back_arrow"
-            android:drawablePadding="8dp"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:text="Quay lại Cài đặt"
-            android:textAllCaps="false"
-            android:textColor="@android:color/white"
-            android:textSize="14sp" />
-    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

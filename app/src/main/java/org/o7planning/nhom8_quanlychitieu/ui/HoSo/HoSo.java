@@ -43,7 +43,7 @@ public class HoSo extends Fragment {
     private Button editProfileBtn;
     private LinearLayout notificationSettings, passwordSettings, termsSettings;
     private LinearLayout logoutBtn;
-    private ImageView notificationBtn;
+    // Đã xóa khai báo notificationBtn
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
     private String userKey; // Để lưu key của user trong database
@@ -66,7 +66,7 @@ public class HoSo extends Fragment {
         passwordSettings = root.findViewById(R.id.passwordSettings);
         termsSettings = root.findViewById(R.id.termsSettings);
         logoutBtn = root.findViewById(R.id.logoutBtn);
-        notificationBtn = root.findViewById(R.id.notificationBtn);
+        // Đã xóa dòng tham chiếu đến notificationBtn
         profileImage = root.findViewById(R.id.profileImage);
 
         // Load user data

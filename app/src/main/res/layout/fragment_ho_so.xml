@@ -4,16 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F5F5F5">
+    android:background="@drawable/home_gradient_background">
 
     <!-- Header -->
+
+    <!-- User Profile Card -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/common_google_signin_btn_text_dark"
+        android:layout_marginTop="16dp"
         android:paddingVertical="16dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -23,27 +26,17 @@
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-medium"
             android:text="Cài Đặt"
-            android:textColor="@android:color/white"
-            android:textSize="22sp"
+            android:textColor="@color/black"
+            android:textSize="28sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:id="@+id/notificationBtn"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_marginEnd="16dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_back_arrow"
-            app:tint="@android:color/white" />
+        <!-- Đã xóa ImageView với id notificationBtn (nút quay lại) -->
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <!-- User Profile Card -->
     <androidx.cardview.widget.CardView
         android:id="@+id/profileCard"
         android:layout_width="match_parent"
