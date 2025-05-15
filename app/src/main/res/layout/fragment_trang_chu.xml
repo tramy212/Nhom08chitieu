@@ -25,22 +25,22 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:text="Chào Mừng Bạn!"
-        android:textColor="#FFFFFF"
+        android:textColor="@color/black"
         android:textSize="24sp"
         android:textStyle="bold"
         android:fontFamily="sans-serif-medium"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/status_bar_placeholder" />
 
+    <!-- Thay đổi cục tròn trắng thành avatar -->
     <ImageView
         android:id="@+id/iv_notification"
         android:layout_width="32dp"
         android:layout_height="32dp"
         android:layout_marginEnd="16dp"
-        android:src="@drawable/thong_bao"
-        android:background="@drawable/notification_background"
-        android:padding="6dp"
-        android:tint="#FFFFFF"
+        android:src="@drawable/ic_person"
+        android:background="@drawable/circle_icon_gradient"
+        android:padding="4dp"
         app:layout_constraintBottom_toBottomOf="@+id/tv_welcome"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/tv_welcome" />
@@ -222,12 +222,12 @@
                         android:gravity="center_vertical"
                         android:orientation="horizontal">
 
+                        <!-- Đã bỏ background cục tròn cho icon doanh thu -->
                         <ImageView
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:src="@drawable/thu_nhap"
-                            android:background="@drawable/circle_icon_background_green"
-                            android:padding="4dp" />
+                            android:padding="2dp" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -270,12 +270,12 @@
                         android:gravity="center_vertical"
                         android:orientation="horizontal">
 
+                        <!-- Đã bỏ background cục tròn cho icon chi phí -->
                         <ImageView
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:src="@drawable/chi_tieu"
-                            android:background="@drawable/circle_icon_background_red"
-                            android:padding="4dp" />
+                            android:padding="2dp" />
 
                         <TextView
                             android:layout_width="wrap_content"

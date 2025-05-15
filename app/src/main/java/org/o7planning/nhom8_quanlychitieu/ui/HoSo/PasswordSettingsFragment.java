@@ -28,7 +28,7 @@ public class PasswordSettingsFragment extends Fragment {
     private Button btnChangePassword;
     private TextView tvForgotPassword;
     private ImageView backButton;
-    private Button btnBackToSettings;
+    // Đã xóa khai báo btnBackToSettings
 
     private FirebaseAuth mAuth;
 
@@ -47,7 +47,7 @@ public class PasswordSettingsFragment extends Fragment {
         btnChangePassword = root.findViewById(R.id.btnChangePassword);
         tvForgotPassword = root.findViewById(R.id.tvForgotPassword);
         backButton = root.findViewById(R.id.backButton);
-        btnBackToSettings = root.findViewById(R.id.btnBackToSettings);
+        // Đã xóa dòng tham chiếu đến btnBackToSettings
 
         // Set click listeners
         btnChangePassword.setOnClickListener(v -> {
@@ -62,9 +62,7 @@ public class PasswordSettingsFragment extends Fragment {
             requireActivity().onBackPressed();
         });
 
-        btnBackToSettings.setOnClickListener(v -> {
-            requireActivity().onBackPressed();
-        });
+        // Đã xóa click listener cho btnBackToSettings
 
         return root;
     }

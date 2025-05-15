@@ -3,9 +3,12 @@ package org.o7planning.nhom8_quanlychitieu.ui.PhanTich;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -36,6 +39,28 @@ public class MonthPickerDialog extends Dialog {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.dialog_month_picker);
 
+        // Thiết lập kích thước và vị trí của dialog
+        Window window = getWindow();
+        if (window != null) {
+            // Đặt background trong suốt để hiển thị bo góc của layout
+            window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+            // Thiết lập kích thước và vị trí
+            WindowManager.LayoutParams params = window.getAttributes();
+
+            // Đặt kích thước tối thiểu để đảm bảo dialog đủ lớn
+            params.width = (int) (getContext().getResources().getDisplayMetrics().widthPixels * 0.85);
+            params.height = WindowManager.LayoutParams.WRAP_CONTENT;
+
+            // Đảm bảo dialog hiển thị ở giữa màn hình
+            params.gravity = Gravity.CENTER;
+
+            window.setAttributes(params);
+
+            // Đảm bảo dialog không bị lệch
+            window.setLayout(params.width, WindowManager.LayoutParams.WRAP_CONTENT);
+        }
+
         // Get views
         TextView tvYear = findViewById(R.id.tv_year);
         ImageView ivPrevYear = findViewById(R.id.iv_prev_year);
@@ -56,12 +81,12 @@ public class MonthPickerDialog extends Dialog {
             monthButtons[i-1].setOnClickListener(v -> {
                 // Reset all buttons
                 for (TextView btn : monthButtons) {
-                    btn.setBackgroundResource(R.drawable.month_button_background);
+                    btn.setBackgroundResource(R.drawable.month_background);
                     btn.setTextColor(Color.parseColor("#757575"));
                 }
 
                 // Highlight selected button
-                v.setBackgroundResource(R.drawable.month_button_selected);
+                v.setBackgroundResource(R.drawable.month_selected_background);
                 ((TextView) v).setTextColor(Color.parseColor("#2196F3"));
 
                 // Update selected month
@@ -70,8 +95,11 @@ public class MonthPickerDialog extends Dialog {
 
             // Highlight current selection
             if (i == selectedMonth) {
-                monthButtons[i-1].setBackgroundResource(R.drawable.month_button_selected);
+                monthButtons[i-1].setBackgroundResource(R.drawable.month_selected_background);
                 monthButtons[i-1].setTextColor(Color.parseColor("#2196F3"));
+            } else {
+                monthButtons[i-1].setBackgroundResource(R.drawable.month_background);
+                monthButtons[i-1].setTextColor(Color.parseColor("#757575"));
             }
         }
 
@@ -98,5 +126,16 @@ public class MonthPickerDialog extends Dialog {
             dismiss();
         });
     }
-}
 
+    @Override
+    public void show() {
+        super.show();
+        // Đảm bảo dialog hiển thị ở giữa màn hình sau khi show
+        Window window = getWindow();
+        if (window != null) {
+            WindowManager.LayoutParams params = window.getAttributes();
+            params.gravity = Gravity.CENTER;
+            window.setAttributes(params);
+        }
+    }
+}

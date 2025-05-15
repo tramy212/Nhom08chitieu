@@ -30,7 +30,7 @@ public class NotificationSettingsFragment extends Fragment {
     private SwitchCompat switchMonthlyReports;
     private Button btnSaveNotificationSettings;
     private ImageView backButton;
-    private Button btnBackToSettings;
+    // Đã xóa khai báo btnBackToSettings
 
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
@@ -52,7 +52,7 @@ public class NotificationSettingsFragment extends Fragment {
         switchMonthlyReports = root.findViewById(R.id.switchMonthlyReports);
         btnSaveNotificationSettings = root.findViewById(R.id.btnSaveNotificationSettings);
         backButton = root.findViewById(R.id.backButton);
-        btnBackToSettings = root.findViewById(R.id.btnBackToSettings);
+        // Đã xóa dòng tham chiếu đến btnBackToSettings
 
         // Load current settings
         loadNotificationSettings();
@@ -66,9 +66,7 @@ public class NotificationSettingsFragment extends Fragment {
             requireActivity().onBackPressed();
         });
 
-        btnBackToSettings.setOnClickListener(v -> {
-            requireActivity().onBackPressed();
-        });
+        // Đã xóa click listener cho btnBackToSettings
 
         return root;
     }

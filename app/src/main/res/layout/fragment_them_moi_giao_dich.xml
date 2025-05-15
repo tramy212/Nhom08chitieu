@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#87CEFA"
+    android:background="@drawable/home_gradient_background"
     tools:context=".ui.ThemMoiGiaoDich.ThemMoiGiaoDich">
 
     <!-- Thêm status bar placeholder để đồng bộ với màn hình giao dịch -->
@@ -19,12 +19,17 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <!-- Giữ nguyên cấu trúc ConstraintLayout nhưng điều chỉnh thuộc tính -->
+
+    <!-- Content - giữ nguyên -->
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:paddingVertical="16dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/status_bar_placeholder">
 
@@ -43,6 +48,8 @@
             app:tint="@android:color/white" />
 
         <!-- Điều chỉnh tiêu đề -->
+
+        <!-- Điều chỉnh nút thông báo -->
         <TextView
             android:id="@+id/tvTitle"
             android:layout_width="wrap_content"
@@ -55,9 +62,9 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
 
-        <!-- Điều chỉnh nút thông báo -->
         <ImageView
             android:id="@+id/notificationBtn"
             android:layout_width="24dp"
@@ -69,7 +76,6 @@
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <!-- Content - giữ nguyên -->
     <androidx.cardview.widget.CardView
         android:id="@+id/cardContent"
         android:layout_width="match_parent"

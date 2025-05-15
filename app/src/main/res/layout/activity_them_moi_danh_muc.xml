@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#87CEFA"
+    android:background="@drawable/home_gradient_background"
     tools:context=".ui.DanhMuc.ThemMoiDanhMucActivity">
 
     <!-- Status Bar Space -->
@@ -14,6 +14,9 @@
         android:layout_height="24dp" />
 
     <!-- Header -->
+
+    <!-- Main Content -->
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -35,7 +38,7 @@
             android:layout_centerInParent="true"
             android:text="Thêm Mới Danh Mục"
             android:textColor="#333333"
-            android:textSize="20sp"
+            android:textSize="26sp"
             android:textStyle="bold" />
 
         <ImageButton
@@ -49,7 +52,6 @@
             android:tint="#333333" />
     </RelativeLayout>
 
-    <!-- Main Content -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"

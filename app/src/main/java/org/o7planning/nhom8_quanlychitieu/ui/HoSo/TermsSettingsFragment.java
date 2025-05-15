@@ -23,7 +23,7 @@ public class TermsSettingsFragment extends Fragment {
 
     private Button btnAcceptTerms;
     private ImageView backButton;
-    private Button btnBackToSettings;
+    // Đã xóa khai báo btnBackToSettings
 
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
@@ -40,7 +40,7 @@ public class TermsSettingsFragment extends Fragment {
         // Initialize views
         btnAcceptTerms = root.findViewById(R.id.btnAcceptTerms);
         backButton = root.findViewById(R.id.backButton);
-        btnBackToSettings = root.findViewById(R.id.btnBackToSettings);
+        // Đã xóa dòng tham chiếu đến btnBackToSettings
 
         // Set click listeners
         btnAcceptTerms.setOnClickListener(v -> {
@@ -51,9 +51,7 @@ public class TermsSettingsFragment extends Fragment {
             requireActivity().onBackPressed();
         });
 
-        btnBackToSettings.setOnClickListener(v -> {
-            requireActivity().onBackPressed();
-        });
+        // Đã xóa click listener cho btnBackToSettings
 
         return root;
     }

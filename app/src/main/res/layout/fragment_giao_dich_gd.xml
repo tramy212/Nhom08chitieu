@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#84D1E9">
+    android:background="@drawable/home_gradient_background">
 
     <!-- Thay thế View status_bar_placeholder bằng include layout -->
     <include
@@ -21,7 +21,7 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="#84D1E9"
+        android:background="@drawable/home_gradient_background"
         android:paddingStart="0dp"
         android:paddingEnd="0dp"
         android:paddingBottom="0dp"
