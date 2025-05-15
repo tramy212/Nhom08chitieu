@@ -6,7 +6,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="chao_mung">Chào Mừng</string>
-    <string name="tai_dang_nhap_bang">Tài Đăng Nhập Bằng Gmail</string>
+    <string name="tai_dang_nhap_bang">Tên Đăng Nhập Bằng Gmail</string>
     <string name="mat_khau">Mật Khẩu</string>
     <string name="dang_nhap">Đăng Nhập</string>
     <string name="quen_mat_khau">Quên mật khẩu?</string>

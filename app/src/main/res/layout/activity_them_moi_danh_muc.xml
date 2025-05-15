@@ -57,16 +57,6 @@
         android:orientation="vertical"
         android:padding="12dp">
 
-        <!-- Nút tạo danh mục tùy chỉnh -->
-        <Button
-            android:id="@+id/btnCustomCategory"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Tạo Danh Mục Tùy Chỉnh"
-            android:textColor="#333333"
-            android:background="@drawable/rounded_button"
-            android:layout_marginBottom="12dp" />
-
         <!-- Chỉ có một RecyclerView với ID này -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewDanhMucMau"

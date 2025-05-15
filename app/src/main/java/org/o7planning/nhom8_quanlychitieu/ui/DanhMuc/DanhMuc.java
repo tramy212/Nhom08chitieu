@@ -7,7 +7,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -54,9 +53,6 @@ public class DanhMuc extends Fragment implements DanhMucAdapter.OnItemClickListe
         recyclerViewDanhMuc = root.findViewById(R.id.recyclerViewDanhMuc);
         recyclerViewDanhMuc.setLayoutManager(new GridLayoutManager(getContext(), 3));
 
-        // Thiết lập các nút điều hướng
-        setupNavigationButtons(root);
-
         // Khởi tạo danh sách rỗng
         danhMucList = new ArrayList<>();
         danhMucAdapter = new DanhMucAdapter(getContext(), danhMucList, this, this);
@@ -66,17 +62,6 @@ public class DanhMuc extends Fragment implements DanhMucAdapter.OnItemClickListe
         loadDanhMucFromFirebase();
 
         return root;
-    }
-
-    private void setupNavigationButtons(View view) {
-        ImageButton backButton = view.findViewById(R.id.backButton);
-
-        backButton.setOnClickListener(v -> {
-            // Quay lại màn hình trước đó
-            if (getActivity() != null) {
-                getActivity().onBackPressed();
-            }
-        });
     }
 
     private void loadDanhMucFromFirebase() {
@@ -174,6 +159,7 @@ public class DanhMuc extends Fragment implements DanhMucAdapter.OnItemClickListe
             }
         }
     }
+
     @Override
     public void onDeleteClick(int position) {
         if (position >= 0 && position < danhMucList.size() - 1) { // Không xóa nút "Thêm"

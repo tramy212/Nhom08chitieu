@@ -129,9 +129,10 @@ public class DanhMucAdapter extends RecyclerView.Adapter<DanhMucAdapter.DanhMucV
                 iconView.setImageResource(R.drawable.ic_pet);
                 break;
             case "du lịch":
+            case "nghỉ dưỡng":
                 iconView.setImageResource(R.drawable.ic_travel);
                 break;
-            case "hóa đơn điện":
+            case "hóa đơn":
                 iconView.setImageResource(R.drawable.ic_bill);
                 break;
             case "thời trang":
@@ -144,12 +145,13 @@ public class DanhMucAdapter extends RecyclerView.Adapter<DanhMucAdapter.DanhMucV
                 iconView.setImageResource(R.drawable.ic_gift);
                 break;
             case "shopee":
-                iconView.setImageResource(R.drawable.ic_shopping);
+                iconView.setImageResource(R.drawable.ic_groceries_gd); // Thay đổi icon cho Shopee
                 break;
             case "đầu tư":
                 iconView.setImageResource(R.drawable.ic_investment);
                 break;
             case "học tập":
+            case "giáo dục":
                 iconView.setImageResource(R.drawable.ic_education);
                 break;
             case "skincare":
@@ -159,10 +161,9 @@ public class DanhMucAdapter extends RecyclerView.Adapter<DanhMucAdapter.DanhMucV
                 iconView.setImageResource(R.drawable.ic_fuel);
                 break;
             case "lương":
-                iconView.setImageResource(R.drawable.ic_salary_gd); // Use the new icon
+                iconView.setImageResource(R.drawable.ic_salary_gd);
                 break;
-
-            default: // Danh mục tùy chỉnh sẽ rơi vào đây
+            default:
                 iconView.setImageResource(R.drawable.ic_dashboard_black_24dp);
                 break;
         }

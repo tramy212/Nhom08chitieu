@@ -73,7 +73,7 @@ public class DanhMucMauAdapter extends RecyclerView.Adapter<DanhMucMauAdapter.Da
                 iconView.setImageResource(R.drawable.ic_spa);
                 break;
             case "pet":
-                iconView.setImageResource(R.drawable.ic_pet);
+                iconView.setImageResource(R.drawable.ic_pet); // Sửa để dùng đúng icon cho Thú Cưng
                 break;
             case "travel":
                 iconView.setImageResource(R.drawable.ic_travel);
@@ -91,7 +91,7 @@ public class DanhMucMauAdapter extends RecyclerView.Adapter<DanhMucMauAdapter.Da
                 iconView.setImageResource(R.drawable.ic_gift);
                 break;
             case "shopping":
-                iconView.setImageResource(R.drawable.ic_shopping);
+                iconView.setImageResource(R.drawable.ic_groceries_gd);
                 break;
             case "investment":
                 iconView.setImageResource(R.drawable.ic_investment);
@@ -106,13 +106,9 @@ public class DanhMucMauAdapter extends RecyclerView.Adapter<DanhMucMauAdapter.Da
                 iconView.setImageResource(R.drawable.ic_fuel);
                 break;
             case "salary":
-                iconView.setImageResource(R.drawable.ic_salary_gd); // Use the new icon
-                break;
-            case "default": // Thêm case này cho danh mục tùy chỉnh
-                iconView.setImageResource(R.drawable.ic_dashboard_black_24dp);
+                iconView.setImageResource(R.drawable.ic_salary_gd);
                 break;
             default:
-                // Use a default icon
                 iconView.setImageResource(R.drawable.ic_dashboard_black_24dp);
                 break;
         }
