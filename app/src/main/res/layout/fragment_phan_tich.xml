@@ -44,24 +44,13 @@
         android:layout_height="wrap_content"
         android:text="Phân Tích"
         android:textColor="#FFFFFF"
-        android:textSize="20sp"
+        android:textSize="25sp"
         android:textStyle="bold"
         android:fontFamily="sans-serif-medium"
         app:layout_constraintBottom_toBottomOf="@+id/iv_back"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/iv_back" />
-
-    <ImageView
-        android:id="@+id/iv_notification"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_marginEnd="8dp"
-        android:src="@drawable/ic_notification"
-        android:tint="#FFFFFF"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_title"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tv_title" />
 
     <!-- Main Content Card -->
     <androidx.cardview.widget.CardView
@@ -139,15 +128,6 @@
                 app:layout_constraintBottom_toBottomOf="@+id/tv_month_summary"
                 app:layout_constraintStart_toEndOf="@+id/tv_month_summary"
                 app:layout_constraintTop_toTopOf="@+id/tv_month_summary" />
-
-            <ImageView
-                android:id="@+id/iv_export"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_export"
-                app:layout_constraintBottom_toBottomOf="@+id/tv_amount"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/tv_amount" />
 
             <!-- Bar Chart Container -->
             <androidx.recyclerview.widget.RecyclerView

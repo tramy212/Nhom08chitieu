@@ -22,11 +22,10 @@
 
     <ImageView
         android:id="@+id/iv_calendar"
-        android:layout_width="35dp"
-        android:layout_height="40dp"
-        android:background="@drawable/circle_background_blue_gd"
+        android:layout_width="45dp"
+        android:layout_height="43dp"
         android:padding="8dp"
-        android:src="@drawable/calendar_gd"
+        android:src="@drawable/ic_calender"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
